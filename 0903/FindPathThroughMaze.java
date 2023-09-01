@@ -36,7 +36,12 @@ public class FindPathThroughMaze {
 			for ( int column = 0; column < maze[0].length; column++ ) {
 				if ( maze[row][column] != -9 ) {
 					if ( canWalk(row, column) ) {
-						System.out.print(".");
+						if ( (isVisited(row, column)) ) {
+							System.out.print("+");
+						}
+						else {
+							System.out.print(".");
+						}
 					}
 					else {
 						System.out.print("o");
@@ -51,30 +56,50 @@ public class FindPathThroughMaze {
 	}
 
 	// Print path solution (+ = walked path)
+	//  This function doesn't work yet!!!
+	// private static void printPath ( int maze[][] ) {
+	// 	// For testing
+	// 	visitedCellTracker[entryColumn][entryColumn] = 1;
+	// 	// Pretty print
+	// 	for ( int row = 0; row < maze.length; row++ ) {
+	// 		for ( int column = 0; column < maze[0].length; column++ ) {
+	// 			switch ( maze[row][column] ) {
+	// 				case -9: // Out of maze
+	// 					System.out.print("o");
+	// 				case -1: // Can't walk, wall
+	// 					System.out.print("x");
+	// 				case 0: // Can walk
+	// 					if ( isVisited(row, column) ) {
+	// 						// Unwalked 
+	// 						System.out.print(".");
+	// 					}
+	// 					else {
+	// 						// Walked 
+	// 						System.out.print('+');
+	// 					}
+	// 				default: // Error
+	// 					System.out.print("Error: ");
+	// 					System.out.println(maze[row][column]);
+	// 					break;
+	// 			}
+	// 		}
+	// 		System.out.println();
+	// 	}
+	// }
+
 	private static void printPath ( int maze[][] ) {
-		// For testing
-		visitedCellTracker[entryColumn][entryColumn] = 1;
-		// Pretty print
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
-				switch ( maze[row][column] ) {
-					case -9: // Out of maze
+				if ( maze[row][column] != -9 ) {
+					if ( canWalk(row, column) ) {
+						System.out.print(".");
+					}
+					else {
 						System.out.print("o");
-					case -1: // Can't walk, wall
-						System.out.print("x");
-					case 0: // Can walk
-						if ( isVisited(row, column) ) {
-							// Unwalked 
-							System.out.print(".");
-						}
-						else {
-							// Walked 
-							System.out.print('+');
-						}
-					default: // Error
-						System.out.print("Error: ");
-						System.out.println(maze[row][column]);
-						break;
+					}
+				}
+				else {
+					System.out.print('x');
 				}
 			}
 			System.out.println();
@@ -155,13 +180,14 @@ public class FindPathThroughMaze {
 	}
 
 	private static boolean isPathExist(int row, int column) {
-		// Sanity check, only check if cell in maze
+		// Sanity check, only check if cell is walkable
 		if ( ! isWalkable(row, column) ) {
 			return false;
 		}
 		
 		// Base Case
 		if ( isGoalFound(row, column) ) { 
+			visitedCellTracker[row][column] = 1;
 			return true;
 		}
 
@@ -198,5 +224,6 @@ public class FindPathThroughMaze {
 			System.out.println("Path doesn't exist.");
 		}
 		System.out.println();
+		printMaze(maze);
 	}
 }
