@@ -1,29 +1,30 @@
 public class FindPathThroughMaze {
-	static int[][] maze = {
-		{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9},
-		{-9, -1, -1, 00, -1, -1, -1, -1, -1, -1, -1, -1, -9},
-		{-9, -1, -1, 00, 00, 00, 00, -1, 00, 00, 00, -1, -9}, 
-		{-9, -1, -1, 00, -1, -1, -1, -1, 00, -1, 00, -1, -9},
-		{-9, -1, -1, 00, 00, 00, 00, 00, 00, -1, 00, -1, -9},
-		{-9, -1, 00, -1, -1, -1, 00, -1, 00, 00, 00, -1, -9},
-		{-9, -1, 00, -1, -1, -1, 00, -1, -1, -1, -1, -1, -9},
-		{-9, -1, 00, -1, -1, 00, 00, -1, -1, -1, -1, -1, -9},
-		{-9, -1, 00, -1, -1, 00, -1, -1, -1, -1, -1, -1, -9},
-		{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9}};
-		
-	static int entryRow = 1;
-	static int entryColumn = 3;
-
+	// maze with loop
 	// static int[][] maze = {
-	//     {-9, -9, -9, -9, -9, -9, -9, -9, -9},
-	//     {-9, -1, -1, -1, 00, -1, -1, -1, -9},
-	//     {-9, -1, 00, 00, 00, 00, 00, -1, -9},
-	//     {-9, -1, 00, -1, 00, -1, 00, 00, -9},
-	//     {-9, -1, -1, -1, -1, -1, -1, -1, -9},
-	//     {-9, -9, -9, -9, -9, -9, -9, -9, -9},};
+	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9},
+	// 	{-9, -1, -1, -1, 00, -1, -1, -1, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, 00, 00, 00, 00, 00, 00, -1, 00, 00, 00, -1, -9}, 
+	// 	{-9, -1, 00, -1, 00, -1, -1, -1, -1, 00, -1, 00, -1, -9},
+	// 	{-9, -1, 00, 00, 00, 00, 00, 00, 00, 00, -1, 00, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, -1, 00, -1, 00, 00, 00, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, -1, 00, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, 00, 00, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, -1, -1, -1, -1, 00, -1, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9}};
 		
 	// static int entryRow = 1;
 	// static int entryColumn = 4;
+
+	static int[][] maze = {
+	    {-9, -9, -9, -9, -9, -9, -9, -9, -9},
+	    {-9, -1, -1, -1, 00, -1, -1, -1, -9},
+	    {-9, -1, 00, 00, 00, 00, 00, -1, -9},
+	    {-9, -1, 00, -1, 00, -1, 00, 00, -9},
+	    {-9, -1, -1, -1, -1, -1, -1, -1, -9},
+	    {-9, -9, -9, -9, -9, -9, -9, -9, -9},};
+		
+	static int entryRow = 1;
+	static int entryColumn = 4;
 
 	static int numRows = maze.length;
 	static int numColumns = maze[0].length;
@@ -34,21 +35,13 @@ public class FindPathThroughMaze {
 	private static void printMaze ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
-				if ( maze[row][column] != -9 ) {
-					if ( canWalk(row, column) ) {
-						if ( (isVisited(row, column)) ) {
-							System.out.print("+");
-						}
-						else {
-							System.out.print(".");
-						}
-					}
-					else {
-						System.out.print("o");
-					}
-				}
+				if ( isOutMaze(row, column) ) System.out.print('x');
 				else {
-					System.out.print('x');
+					if ( canWalk(row, column) ) {
+						if ( isVisited(row, column) ) System.out.print("+");
+						else System.out.print("."); 
+					}
+					else System.out.print("o"); 
 				}
 			}
 			System.out.println();
@@ -56,50 +49,13 @@ public class FindPathThroughMaze {
 	}
 
 	// Print path solution (+ = walked path)
-	//  This function doesn't work yet!!!
-	// private static void printPath ( int maze[][] ) {
-	// 	// For testing
-	// 	visitedCellTracker[entryColumn][entryColumn] = 1;
-	// 	// Pretty print
-	// 	for ( int row = 0; row < maze.length; row++ ) {
-	// 		for ( int column = 0; column < maze[0].length; column++ ) {
-	// 			switch ( maze[row][column] ) {
-	// 				case -9: // Out of maze
-	// 					System.out.print("o");
-	// 				case -1: // Can't walk, wall
-	// 					System.out.print("x");
-	// 				case 0: // Can walk
-	// 					if ( isVisited(row, column) ) {
-	// 						// Unwalked 
-	// 						System.out.print(".");
-	// 					}
-	// 					else {
-	// 						// Walked 
-	// 						System.out.print('+');
-	// 					}
-	// 				default: // Error
-	// 					System.out.print("Error: ");
-	// 					System.out.println(maze[row][column]);
-	// 					break;
-	// 			}
-	// 		}
-	// 		System.out.println();
-	// 	}
-	// }
-
 	private static void printPath ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
-				if ( maze[row][column] != -9 ) {
-					if ( canWalk(row, column) ) {
-						System.out.print(".");
-					}
-					else {
-						System.out.print("o");
-					}
-				}
+				if ( isOutMaze(row, column) ) System.out.print('x');
 				else {
-					System.out.print('x');
+					if ( canWalk(row, column) ) System.out.print(".");
+					else System.out.print("o");
 				}
 			}
 			System.out.println();
@@ -198,10 +154,10 @@ public class FindPathThroughMaze {
 			numSteps += 1;
 
 			// Depth First Search
-			if ( isPathExist(row-1, column) ) { return true; } // Check U cell
-			if ( isPathExist(row+1, column) ) { return true; } // Check D cell 
-			if ( isPathExist(row, column-1) ) { return true; } // Check L cell 
-			if ( isPathExist(row, column+1) ) { return true; } // Check R cell 
+			if ( isPathExist(row-1, column) ) return true; // Check U cell
+			if ( isPathExist(row+1, column) ) return true; // Check D cell 
+			if ( isPathExist(row, column-1) ) return true; // Check L cell 
+			if ( isPathExist(row, column+1) ) return true; // Check R cell 
 
 			// Wrong branch, backtrack
 			visitedCellTracker[row][column] = 0;
