@@ -1,3 +1,5 @@
+import javax.swing.plaf.synth.SynthStyle;
+
 public class FindPathThroughMazeOneBlock {
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9},
@@ -9,13 +11,13 @@ public class FindPathThroughMazeOneBlock {
 	// 	{-9, -9, -9, -9, -9, -9, -9},};
 
 	static int[][] maze = {
-		{-9, -9, -9, -9, -9, -9, -9},
-		{-9, -1, -1, 00, -1, -1, -9},
+		{-1, -1, -1, -1, -1, -9, -9},
+		{-1, -1, 00, 00, -1, -1, -9},
+		{-1, -1, 00, 00, -1, -1, -9},
 		{-9, -1, -1, 00, -1, -1, -9},
 		{-9, -1, -1, 00, -1, -1, -9},
 		{-9, -1, -1, -1, -1, -1, -9},
-		{-9, -1, -1, -1, -1, -1, -9},
-		{-9, -9, -9, -9, -9, -9, -9},};
+		{-9, -9, -9, -1, -9, -9, -9},};
 
 	static int entryRow = 1;
 	static int entryColumn = 3;
@@ -28,12 +30,12 @@ public class FindPathThroughMazeOneBlock {
 	static int[][] visitedCellTracker = new int[numRows][numColumns];
 	
 	// Print Maze (o = out of maze, x = wall, . = can walk)
-	private static void printMaze ( int maze[][] ) {
+	private static void printMaze(int maze[][]) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
 				if ( isOutMaze(row, column) ) System.out.print('x');
 				else {
-					if ( canWalk(row, column) ) {
+					if ( isWalkable(row, column) ) {
 						if ( isVisited(row, column) ) System.out.print("+");
 						else System.out.print("."); 
 					}
@@ -45,12 +47,12 @@ public class FindPathThroughMazeOneBlock {
 	}
 
 	// Print path solution (+ = walked path)
-	private static void printPath ( int maze[][] ) {
+	private static void printPath(int maze[][]) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
 				if ( isOutMaze(row, column) ) System.out.print('x');
 				else {
-					if ( canWalk(row, column) ) System.out.print(".");
+					if ( isWalkable(row, column) ) System.out.print(".");
 					else System.out.print("o");
 				}
 			}
@@ -61,12 +63,12 @@ public class FindPathThroughMazeOneBlock {
 	// Is the cell in bound
 	private static boolean isWithinBounds(int row, int column) {
 		boolean isValidRow = row >= 0 && row < numRows;
-		boolean isValidColumn = column >= 0 && column <= numColumns;
+		boolean isValidColumn = column >= 0 && column < numColumns;
 		return isValidRow && isValidColumn;
 	}
 
 	// Is the cell a wall 
-	private static boolean canWalk(int row, int column) {
+	private static boolean isWalkable(int row, int column) {
 		return maze[row][column] == 0;
 	}
 	
@@ -76,23 +78,25 @@ public class FindPathThroughMazeOneBlock {
 	}
 
 	// Is the cell 1) in bound 2) not a wall 3) not visited
-	private static boolean isWalkable(int row, int column) {
-		boolean _isWithinBounds = isWithinBounds(row, column);
-		boolean _canWalk = canWalk(row, column);
-		boolean _isNotVisited = ! isVisited(row, column);
-		return _isWithinBounds && _canWalk && _isNotVisited;
+	private static boolean isValidCell(int row, int column) {
+		if ( isWithinBounds(row, column) ) {
+			if ( isWalkable(row, column) ) {
+				if ( ! isVisited(row, column) ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	// Check if the given cell is valid and out of the maze
 	private static boolean isOutMaze(int row, int column) {
-		boolean _isWithinBounds = isWithinBounds(row, column);
 		if ( isWithinBounds(row, column) ) {
-			boolean _isOutMaze = maze[row][column] == -9;
-			return _isOutMaze; 
+			if ( maze[row][column] == -9 ) {
+				return true;
+			}
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	// Check if any neighbouring cell is the goal
@@ -148,7 +152,8 @@ public class FindPathThroughMazeOneBlock {
 
 	private static boolean isPathExist(int row, int column) {
 		// Sanity check, only check if cell is walkable
-		if ( !isWalkable(row, column) ) {
+		if ( !isValidCell(row, column) ) {
+			printCell("Invalid cell", row, column);
 			return false;
 		}
 		
@@ -157,6 +162,7 @@ public class FindPathThroughMazeOneBlock {
 		
 		// Base Case
 		if ( isGoalFound(row, column) ) { 
+			System.out.println("Goal found!");
 			visitedCellTracker[row][column] = 1;
 			return true;
 		}
@@ -169,7 +175,7 @@ public class FindPathThroughMazeOneBlock {
 
 			// Depth First Search
 			// TODO: 
-			// 1. More test runs
+			// 1. More test runs - done
 			// 2. Refactor for better readibility
 			// 3. Seperate by concern 
 			// 4. Find Optimal Path
@@ -183,6 +189,7 @@ public class FindPathThroughMazeOneBlock {
 					maze[row-1][column] = 0;
 					haveBrokenWall = true;
 					debugMaze("Breaking U wall");
+					printCell("Wall U", row-1, column);
 					if( isPathExist(row-1, column) ) {
 						numSteps += 1;
 						System.out.println("Wall break worked!");
@@ -200,6 +207,7 @@ public class FindPathThroughMazeOneBlock {
 					maze[row][column-1] = 0;
 					haveBrokenWall = true;
 					debugMaze("Breaking wall L");
+					printCell("Wall L", row, column-1);
 					if( isPathExist(row, column-1) ) {
 						numSteps += 1;
 						System.out.println("Wall break worked!");
@@ -209,7 +217,6 @@ public class FindPathThroughMazeOneBlock {
 					}
 					maze[row][column-1] = -1;
 					debugMaze("No luck: Fixing wall L");
-					
 					haveBrokenWall = false;
 				}
 
@@ -218,6 +225,7 @@ public class FindPathThroughMazeOneBlock {
 					maze[row][column+1] = 0;
 					haveBrokenWall = true;
 					debugMaze("Breaking wall R");
+					printCell("Wall R", row, column+1);
 					if( isPathExist(row, column+1) ) {
 						numSteps += 1;
 						System.out.println("Wall break worked!");
@@ -236,6 +244,7 @@ public class FindPathThroughMazeOneBlock {
 					maze[row+1][column] = 0;
 					haveBrokenWall = true;
 					debugMaze("Breaking wall D");
+					printCell("Wall D", row+1, column);
 					if( isPathExist(row+1, column) ) {
 						numSteps += 1;
 						System.out.println("Wall break worked!");
@@ -246,9 +255,7 @@ public class FindPathThroughMazeOneBlock {
 					debugMaze("No luck: Fixing wall D");
 					haveBrokenWall = false;
 				}
-				haveBrokenWall = true;
 			}
-			// haveBrokenWall = false;
 
 			// Wrong branch, backtrack
 			visitedCellTracker[row][column] = 0;
