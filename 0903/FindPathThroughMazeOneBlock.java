@@ -1,8 +1,3 @@
-import java.util.IllegalFormatPrecisionException;
-
-import javax.print.attribute.standard.PrinterMakeAndModel;
-import javax.swing.plaf.synth.SynthStyle;
-
 public class FindPathThroughMazeOneBlock {
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9},
