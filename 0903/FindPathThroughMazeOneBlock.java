@@ -168,6 +168,11 @@ public class FindPathThroughMazeOneBlock {
 			numSteps += 1;
 
 			// Depth First Search
+			// TODO: 
+			// 1. More test runs
+			// 2. Refactor for better readibility
+			// 3. Seperate by concern 
+			// 4. Find Optimal Path
 			if ( isPathExist(row-1, column) ) return true; // Check U cell
 			if ( isPathExist(row+1, column) ) return true; // Check D cell 
 			if ( isPathExist(row, column-1) ) return true; // Check L cell 
