@@ -129,7 +129,7 @@ public class FindShortestPathThroughMazeBreakWall {
 
 	// Is cell inside maze and not a wall? 
 	private static boolean isWalkable ( int row, int column ) {
-		return maze[row][column] == 0;
+		return isWithinBounds(row, column) && maze[row][column] == 0;
 	}
 
 	private static boolean isWall(int row, int column) {
@@ -155,12 +155,7 @@ public class FindShortestPathThroughMazeBreakWall {
 
 	// Check if the given cell is valid and out of the maze
 	private static boolean isOutMaze ( int row, int column ) {
-		if ( isWithinBounds(row, column) ) {
-			if ( maze[row][column] == -9 ) {
-				return true;
-			}
-		}
-		return false;
+		return isWithinBounds(row, column) && maze[row][column] == -9;
 	}
 
 	// Check if any neighbouring cell is the goal
