@@ -1,6 +1,4 @@
-import javax.swing.plaf.synth.SynthStyle;
-
-public class FindPathThroughMazeOneBlock {
+public class FindPathThroughMazeOneBreak {
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9},
 	// 	{-9, -1, -1, 00, -1, -1, -9},

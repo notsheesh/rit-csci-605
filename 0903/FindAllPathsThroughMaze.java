@@ -1,7 +1,3 @@
-import java.nio.file.Paths;
-import java.text.CollationElementIterator;
-import java.util.concurrent.ThreadPoolExecutor.DiscardPolicy;
-
 public class FindAllPathsThroughMaze {
 	// maze with loop
 	// static int[][] maze = {
