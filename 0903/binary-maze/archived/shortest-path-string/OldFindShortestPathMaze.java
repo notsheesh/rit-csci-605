@@ -1,4 +1,48 @@
-public class FindShortestPathMaze {
+public class OldFindShortestPathMaze {
+	// maze with loop
+	// static int[][] maze = {
+	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9},
+	// 	{-9, -1, -1, -1, 00, -1, -1, -1, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, 00, 00, 00, 00, 00, 00, -1, 00, 00, 00, -1, -9}, 
+	// 	{-9, -1, 00, -1, 00, -1, -1, -1, -1, 00, -1, 00, -1, -9},
+	// 	{-9, -1, 00, 00, 00, 00, 00, 00, 00, 00, -1, 00, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, -1, 00, -1, 00, 00, 00, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, -1, 00, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, -1, 00, -1, -1, 00, 00, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -1, -1, -1, -1, -1, 00, -1, -1, -1, -1, -1, -1, -9},
+	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9}};
+		
+	// static int entryRow = 1;
+	// static int entryColumn = 4;
+
+	// static int[][] maze = {
+	//     {-9, -9, -1, 00, -1, -9, -9, -9, -9},
+	//     {-9, -1, -1, 00, 00, -1, -1, -1, -9},
+	//     {-9, -1, -1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -1, -1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -1, -1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -9, -9, -9, -9, -9, -9, -9, -9},};
+		
+	// static int entryRow = 1;
+	// static int entryColumn = 4;
+
+	// static int[][] maze = {
+	//     {-9, -9, -9, -9, -9, -9},
+	//     {-9, -1, 00, -1, -1, -9},
+	//     {-9, -1, 00, -1, -1, -9},
+    //     {-9, -1, 00, 00, -1, -9},
+	//     {-9, -1, -1, -1, -1, -9},
+	//     {-9, -9, -9, -9, -9, -9},};
+
+	// static int[][] maze = {
+	//     {-9, -9, -9, -9, -9, -9, -9},
+	//     {-9, -1, 00, -1, -1, -1, -9},
+    //     {-9, 00, 00, 00, -1, -1, -9},
+	//     {-9, -1, 00, 00, -1, -1, -9},
+	// 	{-1, -1, -1, 00, 00, 00, -9},
+	// 	{-1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -9, -9, -9, -9, -9, -9},};
+
 	static int[][] maze = {
 	    {-9, -9, -9, -9, -9, -9, -9},
 	    {-9, -1, 00, -1, -1, -1, -9},
@@ -15,10 +59,8 @@ public class FindShortestPathMaze {
 	static int numColumns = maze[0].length;
 	static int[][] visitedCellTracker = new int[numRows][numColumns];
 	static String allPathsStr = "";
-	static String shortestPathStr = ""; 
+	static String finalShortestPathStr = ""; 
 	
-	// Viz functions
-	// Print maze
 	private static void printMaze ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
@@ -35,7 +77,6 @@ public class FindShortestPathMaze {
 		}
 	}
 
-	// Print path to show visited cells
 	private static void printPath ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
 			for ( int column = 0; column < maze[0].length; column++ ) {
@@ -49,19 +90,12 @@ public class FindShortestPathMaze {
 		}
 	}
 
-	// Show maze state at row, column 
 	private static void debugMaze(int row, int column) {
 		System.out.println("State @ [" + row + ", " + column + "]");
 		printMaze(maze);
 		System.out.println("----------------------------------");
 	}
-	
-	// Current cell checkpoint
-	private static void printCell ( String note, int row, int column ) {
-        System.out.println(note + " @ [" + row + ", " + column + "]");
-	}
-	
-	// Helper functions
+    
 	// Is the cell in bound
 	private static boolean isWithinBounds ( int row, int column ) {
 		boolean isValidRow = row >= 0 && row < numRows;
@@ -116,12 +150,10 @@ public class FindShortestPathMaze {
 		return isNeighbourCellGoal(row, column);
 	}
 
-	// Adds move on pathStr
 	private static String makeMove(String pathStr, char move) {
 		return pathStr + move;
 	}
 
-	// Undo move on pathStr
 	private static String undoLastMove(String beforeUndoPathStr) {
 		String afterUndoPathStr = "";
 		int lengthMinusOne = beforeUndoPathStr.length()-1;
@@ -131,15 +163,19 @@ public class FindShortestPathMaze {
 		return afterUndoPathStr;
 	}
 
+	private static void printCell ( String note, int row, int column ) {
+        System.out.println(note + " @ [" + row + ", " + column + "]");
+	}
 
 	private static void solveMaze ( int startRow, int startColumn ) { 
 		System.out.println("Attempting to solve the maze...");
-		printMaze(maze);
 		findAllPaths("", startRow, startColumn);
 		if (allPathsStr.length() > 0) {
 			System.out.println("All Paths: " + allPathsStr);
-			System.out.println("Shortest path: " + shortestPathStr);
-			System.out.println("Shortest path length: " + shortestPathStr.length());
+			// String shortestPath = getShortestPath(allPathsStr);
+			// System.out.println("Shortest Path: " + shortestPath);
+			System.out.println("Shortest path: " + finalShortestPathStr);
+			System.out.println("Shortest path length: " + finalShortestPathStr.length());
 		}
 		else {
 			System.out.println("Path doesn't exist.");
@@ -152,16 +188,14 @@ public class FindShortestPathMaze {
 			visitedCellTracker[row][column] = 1;
 			allPathsStr += pathStr + ",";
 
-			// Update shortestPathStr is shorter path found
-			if (shortestPathStr.length() == 0){
-				shortestPathStr = pathStr;
+			if (finalShortestPathStr.length() == 0){
+				finalShortestPathStr = pathStr;
 			}
 			else{
-				if(pathStr.length() < shortestPathStr.length()){
-					shortestPathStr = pathStr;
+				if(pathStr.length() < finalShortestPathStr.length()){
+					finalShortestPathStr = pathStr;
 				}
 			}
-			
 			// System.out.println("----------------------------------");
 			// printCell("findAllPaths", row, column);
 			// debugMaze(row, column);
