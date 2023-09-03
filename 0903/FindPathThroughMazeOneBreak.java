@@ -1,5 +1,3 @@
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 public class FindPathThroughMazeOneBreak {
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9},
@@ -20,7 +18,7 @@ public class FindPathThroughMazeOneBreak {
 		{-9, -9, -9, -1, -9, -9, -9},};
 
 	static int entryRow = 1;
-	static int entryColumn = 3;
+	static int entryColumn = 2;
 	static boolean haveBrokenWall = false;
 	static boolean triedAllFour = false;
 
@@ -150,95 +148,6 @@ public class FindPathThroughMazeOneBreak {
 		return isWithinBounds(row, column) && maze[row][column] == -1;
 	}
 
-	private static void isPathExistUPLR(int row, int column) {
-		if ( isValidCell(row-1, column) && isPathExist(row-1, column) ) {
-			return true; // Check U cell
-		}
-		if ( isValidCell(row+1, column) && isPathExist(row+1, column) ) {
-			return true; // Check D cell 
-		}
-		if ( isValidCell(row, column-1) && isPathExist(row, column-1) ) {
-			return true; // Check L cell 
-		}
-		if ( isValidCell(row, column+1) && isPathExist(row, column+1) ) {
-			return true; // Check R cell 
-		}
-	}
-
-	private static void isPathExistBreakUPLR(int row, int column) {
-		if ( isWall(row-1, column) ) {
-			// Break U cell
-			maze[row-1][column] = 0;
-			haveBrokenWall = true;
-			debugMaze("Breaking U wall");
-			printCell("Wall U", row-1, column);
-			if( isPathExist(row-1, column) ) {
-				numSteps += 1;
-				System.out.println("Wall break worked!");
-				printCell("Moving to: ", row-1, column);
-				System.out.println();
-				return true;
-			}
-			maze[row-1][column] = -1;
-			debugMaze("No luck: Fixing wall U");
-			haveBrokenWall = false;
-		}
-
-		if ( isWall(row, column-1) ) {
-			// Break L cell
-			maze[row][column-1] = 0;
-			haveBrokenWall = true;
-			debugMaze("Breaking wall L");
-			printCell("Wall L", row, column-1);
-			if( isPathExist(row, column-1) ) {
-				numSteps += 1;
-				System.out.println("Wall break worked!");
-				printCell("Moving to: ", row, column-1);
-				System.out.println();
-				return true;
-			}
-			maze[row][column-1] = -1;
-			debugMaze("No luck: Fixing wall L");
-			haveBrokenWall = false;
-		}
-
-		if ( isWall(row, column+1) ) {
-			// Break R cell
-			maze[row][column+1] = 0;
-			haveBrokenWall = true;
-			debugMaze("Breaking wall R");
-			printCell("Wall R", row, column+1);
-			if( isPathExist(row, column+1) ) {
-				numSteps += 1;
-				System.out.println("Wall break worked!");
-				printCell("Moving to: ", row, column+1);
-				System.out.println();
-				return true;
-			}
-			maze[row][column+1] = -1;
-			debugMaze("No luck: Fixing wall R");
-			
-			haveBrokenWall = false;
-		}
-
-		if ( isWall(row+1, column) ) {
-			// Break D cell
-			maze[row+1][column] = 0;
-			haveBrokenWall = true;
-			debugMaze("Breaking wall D");
-			printCell("Wall D", row+1, column);
-			if( isPathExist(row+1, column) ) {
-				numSteps += 1;
-				System.out.println("Wall break worked!");
-				printCell("Moving to: ", row+1, column);
-				return true;
-			}
-			maze[row+1][column] = -1;
-			debugMaze("No luck: Fixing wall D");
-			haveBrokenWall = false;
-		}
-	}
-
 	private static boolean isPathExist(int row, int column) {		
 		printCell("isPathExist @ Cell", row, column);
 		debugMaze();
@@ -256,10 +165,82 @@ public class FindPathThroughMazeOneBreak {
 			visitedCellTracker[row][column] = 1;
 			numSteps += 1;
 
-			isPathExistUPLR(row, column);
-
+			if ( isValidCell(row-1, column) && isPathExist(row-1, column) ) return true; // Check U cell
+			if ( isValidCell(row+1, column) && isPathExist(row+1, column) ) return true; // Check D cell 
+			if ( isValidCell(row, column-1) && isPathExist(row, column-1) ) return true; // Check L cell 
+			if ( isValidCell(row, column+1) && isPathExist(row, column+1) ) return true; // Check R cell 
 			if ( haveBrokenWall == false ) {
-				isPathExistBreakUPLR(row, column);
+				if ( isWall(row-1, column) ) {
+					// Break U cell
+					maze[row-1][column] = 0;
+					haveBrokenWall = true;
+					debugMaze("Breaking U wall");
+					printCell("Wall U", row-1, column);
+					if( isPathExist(row-1, column) ) {
+						numSteps += 1;
+						System.out.println("Wall break worked!");
+						printCell("Moving to: ", row-1, column);
+						System.out.println();
+						return true;
+					}
+					maze[row-1][column] = -1;
+					debugMaze("No luck: Fixing wall U");
+					haveBrokenWall = false;
+				}
+
+				if ( isWall(row, column-1) ) {
+					// Break L cell
+					maze[row][column-1] = 0;
+					haveBrokenWall = true;
+					debugMaze("Breaking wall L");
+					printCell("Wall L", row, column-1);
+					if( isPathExist(row, column-1) ) {
+						numSteps += 1;
+						System.out.println("Wall break worked!");
+						printCell("Moving to: ", row, column-1);
+						System.out.println();
+						return true;
+					}
+					maze[row][column-1] = -1;
+					debugMaze("No luck: Fixing wall L");
+					haveBrokenWall = false;
+				}
+
+				if ( isWall(row, column+1) ) {
+					// Break R cell
+					maze[row][column+1] = 0;
+					haveBrokenWall = true;
+					debugMaze("Breaking wall R");
+					printCell("Wall R", row, column+1);
+					if( isPathExist(row, column+1) ) {
+						numSteps += 1;
+						System.out.println("Wall break worked!");
+						printCell("Moving to: ", row, column+1);
+						System.out.println();
+						return true;
+					}
+					maze[row][column+1] = -1;
+					debugMaze("No luck: Fixing wall R");
+					
+					haveBrokenWall = false;
+				}
+
+				if ( isWall(row+1, column) ) {
+					// Break D cell
+					maze[row+1][column] = 0;
+					haveBrokenWall = true;
+					debugMaze("Breaking wall D");
+					printCell("Wall D", row+1, column);
+					if( isPathExist(row+1, column) ) {
+						numSteps += 1;
+						System.out.println("Wall break worked!");
+						printCell("Moving to: ", row+1, column);
+						return true;
+					}
+					maze[row+1][column] = -1;
+					debugMaze("No luck: Fixing wall D");
+					haveBrokenWall = false;
+				}
 			}
 
 			// Wrong branch, backtrack
