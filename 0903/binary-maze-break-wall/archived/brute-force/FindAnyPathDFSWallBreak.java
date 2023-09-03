@@ -1,4 +1,4 @@
-public class FindAnyPathBruteForceWallBreak {
+public class OLDFindAnyPathBruteForceWallBreak {
 
 	static int[][] maze = {
 	    {-1, -9, -9, -1, -9, -1, -9, -9, -9},

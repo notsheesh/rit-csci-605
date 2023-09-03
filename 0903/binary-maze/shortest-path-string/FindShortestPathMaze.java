@@ -169,6 +169,8 @@ public class FindShortestPathMaze {
         System.out.println(note + " @ [" + row + ", " + column + "]");
 	}
 
+	// Delete function late 
+	{
 	// private static String getShortestPath(String allString) {
 	// 	int i = 0;
 	// 	int count = 0;
@@ -191,6 +193,8 @@ public class FindShortestPathMaze {
 	// 	String shortestPath = "[" + shortestPathStr + ", " + shortestPathLength + "]";
 	// 	return shortestPath;
 	// }
+	}
+	
 
 	private static void solveMaze ( int startRow, int startColumn ) { 
 		System.out.println("Attempting to solve the maze...");
@@ -211,7 +215,7 @@ public class FindShortestPathMaze {
 		// Base Case
 		if ( isGoalFound(row, column) ) { 
 			visitedCellTracker[row][column] = 1;
-			allPathsStr = pathStr + "," + allPathsStr;
+			allPathsStr += pathStr + ",";
 
 			if (finalShortestPathStr.length() == 0){
 				finalShortestPathStr = pathStr;
