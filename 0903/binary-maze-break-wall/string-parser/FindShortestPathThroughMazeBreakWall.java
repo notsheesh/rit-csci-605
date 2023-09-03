@@ -1,4 +1,4 @@
-public class FindAllPathsThroughMaze {
+public class FindShortestPathThroughMazeBreakWall {
 	// maze with loop
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9},
@@ -43,11 +43,35 @@ public class FindAllPathsThroughMaze {
 	// 	{-1, -1, -1, -1, -1, -1, -9},
 	//     {-9, -9, -9, -9, -9, -9, -9},};
 
+	// static int[][] maze = {
+	//     {-9, -9, -9, -9, -9, -9, -9},
+	//     {-9, -1, 00, -1, -1, -1, -9},
+	//     {-9, -1, 00, 00, -1, -1, -9},
+	//     {-9, -1, 00, 00, -1, -1, -9},
+	// 	{-1, -1, -1, -1, -1, -1, -9},
+	// 	{-1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -9, -9, -9, -9, -9, -9},};
+
+	// static int entryRow = 1;
+	// static int entryColumn = 2;
+
+	// static int[][] maze = {
+	//     {-9, -9, -9, -9, -9, -9, -9},
+	//     {-9, -1, 00, -1, -1, -1, -9},
+	//     {-9, -1, 00, 00, -1, -1, -9},
+	//     {-9, -1, 00, 00, -1, -1, -9},
+	// 	{-1, -1, -1, -1, -1, -1, -9},
+	// 	{-1, -1, -1, -1, -1, -1, -9},
+	//     {-9, -9, -9, -9, -9, -9, -9},};
+
+	// static int entryRow = 1;
+	// static int entryColumn = 2;
+
 	static int[][] maze = {
-	    {-9, -9, -9, -9, -9, -9, -9},
-	    {-9, -1, 00, -1, -1, -1, -9},
-	    {-9, -1, 00, 00, -1, -1, -9},
-	    {-9, -1, 00, 00, -1, -1, -9},
+	    {-9, -1, -9, -9, -9, -9, -9},
+	    {-1, -1, 00, -1, -1, -1, -9},
+	    {-1, -1, 00, 00, -1, -1, -9},
+	    {-1, -1, 00, 00, -1, -1, -9},
 		{-1, -1, -1, -1, -1, -1, -9},
 		{-1, -1, -1, -1, -1, -1, -9},
 	    {-9, -9, -9, -9, -9, -9, -9},};
@@ -59,6 +83,7 @@ public class FindAllPathsThroughMaze {
 	static int numColumns = maze[0].length;
 	static int[][] visitedCellTracker = new int[numRows][numColumns];
 	static String allPathStr = "";
+	static boolean haveBrokenWall = false;
 	
 	private static void printMaze ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
@@ -105,6 +130,10 @@ public class FindAllPathsThroughMaze {
 	// Is cell inside maze and not a wall? 
 	private static boolean isWalkable ( int row, int column ) {
 		return maze[row][column] == 0;
+	}
+
+	private static boolean isWall(int row, int column) {
+		return isWithinBounds(row, column) && maze[row][column] == -1;
 	}
 	
 	// Has the cell been visited before 
@@ -220,7 +249,8 @@ public class FindAllPathsThroughMaze {
 		printCell("findAllPaths", row, column);
 		debugMaze(row, column);
 
-		if (isValidCell(row-1, column)) { // Check U cell
+		// Check U cell
+		if (isValidCell(row-1, column)) { 
 			// printCell("Moving to", row-1, column);
 			pathStr = makeMove(pathStr, 'u');
 			System.out.println("pathStr: " + pathStr);
@@ -228,7 +258,8 @@ public class FindAllPathsThroughMaze {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row-1][column] = 0;
 		}
-		if (isValidCell(row+1, column)) { // Check D 
+		// Check D 
+		if (isValidCell(row+1, column)) { 
 			// printCell("Moving to", row+1, column);
 			pathStr = makeMove(pathStr, 'd');
 			System.out.println("pathStr: " + pathStr);
@@ -236,7 +267,8 @@ public class FindAllPathsThroughMaze {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row+1][column] = 0;
 		}
-		if (isValidCell(row, column-1)) { // Check L cell
+		// Check L cell
+		if (isValidCell(row, column-1)) { 
 			// printCell("Moving to", row, column-1);
 			pathStr = makeMove(pathStr, 'l');
 			System.out.println("pathStr: " + pathStr);
@@ -244,7 +276,8 @@ public class FindAllPathsThroughMaze {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row][column-1] = 0;
 		}
-		if (isValidCell(row, column+1)) { // Check R cell
+		// Check R cell
+		if (isValidCell(row, column+1)) { 
 			// printCell("Moving to", row, column+1);
 			pathStr = makeMove(pathStr, 'r');
 			System.out.println("pathStr: " + pathStr);
@@ -252,6 +285,56 @@ public class FindAllPathsThroughMaze {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row][column+1] = 0;
 		}
+
+		if ( haveBrokenWall == false ) {
+			// Break U wall
+			if ( isWall(row-1, column) ) {
+				maze[row-1][column] = 0;
+				debugMaze(row-1, column);
+				haveBrokenWall = true;
+				pathStr = makeMove(pathStr, 'u');
+				findAllPaths(pathStr, row-1, column);
+				pathStr = undoLastMove(pathStr);
+				visitedCellTracker[row-1][column] = 0;
+				maze[row-1][column] = -1;
+				haveBrokenWall = false;
+			}
+			// Break D wall
+			if ( isWall(row+1, column) ) {
+				maze[row+1][column] = 0;
+				haveBrokenWall = true;
+				pathStr = makeMove(pathStr, 'd');
+				findAllPaths(pathStr, row+1, column);
+				pathStr = undoLastMove(pathStr);
+				visitedCellTracker[row+1][column] = 0;
+				maze[row+1][column] = -1;
+				haveBrokenWall = false;
+			}
+			// Break L wall
+			if ( isWall(row, column-1) ) {
+				maze[row][column-1] = 0;
+				haveBrokenWall = true;
+				pathStr = makeMove(pathStr, 'l');
+				findAllPaths(pathStr, row, column-1);
+				pathStr = undoLastMove(pathStr);
+				visitedCellTracker[row][column-1] = 0;
+				maze[row][column-1] = -1;
+				haveBrokenWall = false;
+				
+			}
+			// Break R wall
+			if ( isWall(row, column+1) ) {
+				maze[row][column+1] = 0;
+				haveBrokenWall = true;
+				pathStr = makeMove(pathStr, 'r');
+				findAllPaths(pathStr, row, column+1);
+				pathStr = undoLastMove(pathStr);
+				visitedCellTracker[row][column+1] = 0;
+				maze[row][column+1] = -1;
+				haveBrokenWall = false;
+			}
+		}
+
 		// System.out.println("Covered all options");
 		// printCell("Nowhere else to go from", row, column);
 		return; 
