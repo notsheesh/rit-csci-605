@@ -1,4 +1,6 @@
-public class FindShortestPathThroughMazeBreakWall {
+import java.nio.file.Paths;
+
+public class FindShortestPathMaze {
 	// maze with loop
 	// static int[][] maze = {
 	// 	{-9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9, -9},
@@ -43,37 +45,13 @@ public class FindShortestPathThroughMazeBreakWall {
 	// 	{-1, -1, -1, -1, -1, -1, -9},
 	//     {-9, -9, -9, -9, -9, -9, -9},};
 
-	// static int[][] maze = {
-	//     {-9, -9, -9, -9, -9, -9, -9},
-	//     {-9, -1, 00, -1, -1, -1, -9},
-	//     {-9, -1, 00, 00, -1, -1, -9},
-	//     {-9, -1, 00, 00, -1, -1, -9},
-	// 	{-1, -1, -1, -1, -1, -1, -9},
-	// 	{-1, -1, -1, -1, -1, -1, -9},
-	//     {-9, -9, -9, -9, -9, -9, -9},};
-
-	// static int entryRow = 1;
-	// static int entryColumn = 2;
-
-	// static int[][] maze = {
-	//     {-9, -9, -9, -9, -9, -9, -9},
-	//     {-9, -1, 00, -1, -1, -1, -9},
-	//     {-9, -1, 00, 00, -1, -1, -9},
-	//     {-9, -1, 00, 00, -1, -1, -9},
-	// 	{-1, -1, -1, -1, -1, -1, -9},
-	// 	{-1, -1, -1, -1, -1, -1, -9},
-	//     {-9, -9, -9, -9, -9, -9, -9},};
-
-	// static int entryRow = 1;
-	// static int entryColumn = 2;
-
 	static int[][] maze = {
-	    {-9, -1, -9, -9, -9, -9, -9},
-	    {-1, -1, 00, -1, -1, -1, -9},
-	    {-1, -1, 00, 00, -1, -1, -9},
-	    {-1, -1, 00, 00, -1, -1, -9},
-		{-1, -1, -1, -1, -1, -1, -9},
-		{-1, -1, -1, -1, -1, -1, -9},
+	    {-9, -9, -9, -9, -9, -9, -9},
+	    {-9, -1, 00, -1, -1, -1, -9},
+	    {-9, -1, 00, 00, -1, -1, -9},
+	    {-9, 00, 00, 00, 00, 00, -9},
+		{-1, -1, -1, -1, 00, -1, -9},
+		{-1, -1, -1, -1, 00, 00, -9},
 	    {-9, -9, -9, -9, -9, -9, -9},};
 
 	static int entryRow = 1;
@@ -82,8 +60,8 @@ public class FindShortestPathThroughMazeBreakWall {
 	static int numRows = maze.length;
 	static int numColumns = maze[0].length;
 	static int[][] visitedCellTracker = new int[numRows][numColumns];
-	static String allPathStr = "";
-	static boolean haveBrokenWall = false;
+	static String allPathsStr = "";
+	static String finalShortestPathStr = ""; 
 	
 	private static void printMaze ( int maze[][] ) {
 		for ( int row = 0; row < maze.length; row++ ) {
@@ -130,10 +108,6 @@ public class FindShortestPathThroughMazeBreakWall {
 	// Is cell inside maze and not a wall? 
 	private static boolean isWalkable ( int row, int column ) {
 		return isWithinBounds(row, column) && maze[row][column] == 0;
-	}
-
-	private static boolean isWall(int row, int column) {
-		return isWithinBounds(row, column) && maze[row][column] == -1;
 	}
 	
 	// Has the cell been visited before 
@@ -195,57 +169,75 @@ public class FindShortestPathThroughMazeBreakWall {
         System.out.println(note + " @ [" + row + ", " + column + "]");
 	}
 
-	private static int getShortestPathLength(String allString) {
-		int i = 0;
-		int count = 0;
-		int shortestPathLength = Integer.MAX_VALUE;
-		while ( i < allPathStr.length() ) {
-			while(allPathStr.charAt(i) != ',') {
-				i += 1;
-				count += 1;
-			}
-			if ( count < shortestPathLength ) {
-				shortestPathLength = count;
-				count = 0;
-			} 
-			i += 1;
-		}
-		return shortestPathLength;
-	}
+	// private static String getShortestPath(String allString) {
+	// 	int i = 0;
+	// 	int count = 0;
+	// 	int shortestPathLength = Integer.MAX_VALUE;
+	// 	String shortestPathStr = "";
+	// 	while ( i < allPathsStr.length() ) {
+	// 		String pathStr = "";
+	// 		while(allPathsStr.charAt(i) != ',') {
+	// 			i += 1;
+	// 			pathStr += allPathsStr.charAt(i);
+	// 			count += 1;
+	// 		}
+	// 		if ( count < shortestPathLength ) {
+	// 			shortestPathStr = pathStr;
+	// 			shortestPathLength = count;
+	// 			count = 0;
+	// 		} 
+	// 		i += 1;
+	// 	}
+	// 	String shortestPath = "[" + shortestPathStr + ", " + shortestPathLength + "]";
+	// 	return shortestPath;
+	// }
 
-	private static int solveMaze ( int startRow, int startColumn ) { 
+	private static void solveMaze ( int startRow, int startColumn ) { 
 		System.out.println("Attempting to solve the maze...");
 		findAllPaths("", startRow, startColumn);
-		if (allPathStr.length() > 0) {
-			System.out.println("All Paths: " + allPathStr);
-			return getShortestPathLength(allPathStr);
+		if (allPathsStr.length() > 0) {
+			System.out.println("All Paths: " + allPathsStr);
+			// String shortestPath = getShortestPath(allPathsStr);
+			// System.out.println("Shortest Path: " + shortestPath);
+			System.out.println("Shortest path: " + finalShortestPathStr);
+			System.out.println("Shortest path length: " + finalShortestPathStr.length());
 		}
 		else {
-			return -1;
+			System.out.println("Path doesn't exist.");
 		}
-
 	}
 
 	private static void findAllPaths ( String pathStr, int row, int column ) {
 		// Base Case
-		if ( isGoalFound(row, column) ) {
-			printCell("findAllPaths", row, column);
-			System.out.println("Goal found!"); 
-			allPathStr = pathStr + "," + allPathStr;
-			System.out.println("allPathStr: " + allPathStr);
+		if ( isGoalFound(row, column) ) { 
 			visitedCellTracker[row][column] = 1;
+			allPathsStr = pathStr + "," + allPathsStr;
+
+			if (finalShortestPathStr.length() == 0){
+				finalShortestPathStr = pathStr;
+			}
+			else{
+				if(pathStr.length() < finalShortestPathStr.length()){
+					finalShortestPathStr = pathStr;
+				}
+			}
+
+			// System.out.println("----------------------------------");
+			printCell("findAllPaths", row, column);
 			debugMaze(row, column);
+			printCell(pathStr, row, column);
+			System.out.println("Goal found!");
+			System.out.println("----------------------------------");
 			return;
 		}
 
 		// Keep trying, go deeper
 		visitedCellTracker[row][column] = 1;
-		
+		// System.out.println("----------------------------------");
 		printCell("findAllPaths", row, column);
 		debugMaze(row, column);
 
-		// Check U cell
-		if (isValidCell(row-1, column)) { 
+		if (isValidCell(row-1, column)) { // Check U cell
 			// printCell("Moving to", row-1, column);
 			pathStr = makeMove(pathStr, 'u');
 			System.out.println("pathStr: " + pathStr);
@@ -253,8 +245,7 @@ public class FindShortestPathThroughMazeBreakWall {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row-1][column] = 0;
 		}
-		// Check D 
-		if (isValidCell(row+1, column)) { 
+		if (isValidCell(row+1, column)) { // Check D 
 			// printCell("Moving to", row+1, column);
 			pathStr = makeMove(pathStr, 'd');
 			System.out.println("pathStr: " + pathStr);
@@ -262,8 +253,7 @@ public class FindShortestPathThroughMazeBreakWall {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row+1][column] = 0;
 		}
-		// Check L cell
-		if (isValidCell(row, column-1)) { 
+		if (isValidCell(row, column-1)) { // Check L cell
 			// printCell("Moving to", row, column-1);
 			pathStr = makeMove(pathStr, 'l');
 			System.out.println("pathStr: " + pathStr);
@@ -271,8 +261,7 @@ public class FindShortestPathThroughMazeBreakWall {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row][column-1] = 0;
 		}
-		// Check R cell
-		if (isValidCell(row, column+1)) { 
+		if (isValidCell(row, column+1)) { // Check R cell
 			// printCell("Moving to", row, column+1);
 			pathStr = makeMove(pathStr, 'r');
 			System.out.println("pathStr: " + pathStr);
@@ -280,71 +269,14 @@ public class FindShortestPathThroughMazeBreakWall {
 			pathStr = undoLastMove(pathStr);
 			visitedCellTracker[row][column+1] = 0;
 		}
-
-		if ( haveBrokenWall == false ) {
-			// Break U wall
-			if ( isWall(row-1, column) ) {
-				maze[row-1][column] = 0;
-				debugMaze(row-1, column);
-				haveBrokenWall = true;
-				pathStr = makeMove(pathStr, 'u');
-				findAllPaths(pathStr, row-1, column);
-				pathStr = undoLastMove(pathStr);
-				visitedCellTracker[row-1][column] = 0;
-				maze[row-1][column] = -1;
-				haveBrokenWall = false;
-			}
-			// Break D wall
-			if ( isWall(row+1, column) ) {
-				maze[row+1][column] = 0;
-				haveBrokenWall = true;
-				pathStr = makeMove(pathStr, 'd');
-				findAllPaths(pathStr, row+1, column);
-				pathStr = undoLastMove(pathStr);
-				visitedCellTracker[row+1][column] = 0;
-				maze[row+1][column] = -1;
-				haveBrokenWall = false;
-			}
-			// Break L wall
-			if ( isWall(row, column-1) ) {
-				maze[row][column-1] = 0;
-				haveBrokenWall = true;
-				pathStr = makeMove(pathStr, 'l');
-				findAllPaths(pathStr, row, column-1);
-				pathStr = undoLastMove(pathStr);
-				visitedCellTracker[row][column-1] = 0;
-				maze[row][column-1] = -1;
-				haveBrokenWall = false;
-				
-			}
-			// Break R wall
-			if ( isWall(row, column+1) ) {
-				maze[row][column+1] = 0;
-				haveBrokenWall = true;
-				pathStr = makeMove(pathStr, 'r');
-				findAllPaths(pathStr, row, column+1);
-				pathStr = undoLastMove(pathStr);
-				visitedCellTracker[row][column+1] = 0;
-				maze[row][column+1] = -1;
-				haveBrokenWall = false;
-			}
-		}
-
 		// System.out.println("Covered all options");
 		// printCell("Nowhere else to go from", row, column);
 		return; 
 	}
 
 	public static void main ( String[] args ) {
-		System.out.println();System.out.println();
-		System.out.println();
-		int minPathLength = solveMaze(entryRow, entryColumn);
-		if ( minPathLength != -1 ) {
-			System.out.println("Path exists.");
-			System.out.println("Shortest Path Length: " + minPathLength);
-		}
-		else {
-			System.out.println("Path doesn't exist.");
-		}
+		// System.out.println();System.out.println();
+		// System.out.println();
+		solveMaze(entryRow, entryColumn);
 	}
 }
