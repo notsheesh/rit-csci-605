@@ -38,23 +38,23 @@ public class FindAllPathsThroughMaze {
 	//     {-9, -1, -1, -1, -1, -9},
 	//     {-9, -9, -9, -9, -9, -9},};
 
-	static int[][] maze = {
-	    {-9, -9, -9, -9, -9, -9, -9},
-	    {-9, -1, 00, -1, -1, -1, -9},
-        {-9, 00, 00, 00, -1, -1, -9},
-	    {-9, -1, 00, 00, -1, -1, -9},
-		{-1, -1, -1, 00, 00, 00, -9},
-		{-1, -1, -1, -1, -1, -1, -9},
-	    {-9, -9, -9, -9, -9, -9, -9},};
-
 	// static int[][] maze = {
 	//     {-9, -9, -9, -9, -9, -9, -9},
 	//     {-9, -1, 00, -1, -1, -1, -9},
+    //     {-9, 00, 00, 00, -1, -1, -9},
 	//     {-9, -1, 00, 00, -1, -1, -9},
-	//     {-9, -1, 00, 00, -1, -1, -9},
-	// 	{-1, -1, -1, -1, -1, -1, -9},
+	// 	{-1, -1, -1, 00, 00, 00, -9},
 	// 	{-1, -1, -1, -1, -1, -1, -9},
 	//     {-9, -9, -9, -9, -9, -9, -9},};
+
+	static int[][] maze = {
+	    {-9, -9, -9, -9, -9, -9, -9},
+	    {-9, -1, 00, -1, -1, -1, -9},
+	    {-9, -1, 00, 00, -1, -1, -9},
+	    {-9, -1, 00, 00, -1, -1, -9},
+		{-1, -1, -1, -1, -1, -1, -9},
+		{-1, -1, -1, -1, -1, -1, -9},
+	    {-9, -9, -9, -9, -9, -9, -9},};
 
 	static int entryRow = 1;
 	static int entryColumn = 2;
@@ -196,8 +196,14 @@ public class FindAllPathsThroughMaze {
 	private static int solveMaze ( int startRow, int startColumn ) { 
 		System.out.println("Attempting to solve the maze...");
 		findAllPaths("", startRow, startColumn);
-		System.out.println("All Paths: " + allPathStr);
-		return getShortestPathLength(allPathStr);
+		if (allPathStr.length() > 0) {
+			System.out.println("All Paths: " + allPathStr);
+			return getShortestPathLength(allPathStr);
+		}
+		else {
+			return -1;
+		}
+
 	}
 
 	private static void findAllPaths ( String pathStr, int row, int column ) {
@@ -259,14 +265,12 @@ public class FindAllPathsThroughMaze {
 		System.out.println();System.out.println();
 		System.out.println();
 		int minPathLength = solveMaze(entryRow, entryColumn);
-		System.out.println("minPathLength: " + minPathLength);
-		// if ( minPathLength != -1 ) {
-		// 	System.out.println("Path exists.");
-		// 	System.out.println("Path Length: " + minPathLength);
-		// }
-		// else {
-		// 	System.out.println("Path doesn't exist.");
-		// }
-		// System.out.println();
+		if ( minPathLength != -1 ) {
+			System.out.println("Path exists.");
+			System.out.println("Shortest Path Length: " + minPathLength);
+		}
+		else {
+			System.out.println("Path doesn't exist.");
+		}
 	}
 }

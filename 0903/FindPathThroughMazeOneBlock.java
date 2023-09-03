@@ -150,13 +150,7 @@ public class FindPathThroughMazeOneBlock {
 		return isWithinBounds(row, column) && maze[row][column] == -1;
 	}
 
-	private static boolean isPathExist(int row, int column) {
-		// Sanity check, only check if cell is walkable
-		if ( !isValidCell(row, column) ) {
-			printCell("Invalid cell", row, column);
-			return false;
-		}
-		
+	private static boolean isPathExist(int row, int column) {		
 		printCell("isPathExist @ Cell", row, column);
 		debugMaze();
 		
@@ -179,10 +173,10 @@ public class FindPathThroughMazeOneBlock {
 			// 2. Refactor for better readibility
 			// 3. Seperate by concern 
 			// 4. Find Optimal Path
-			if ( isPathExist(row-1, column) ) return true; // Check U cell
-			if ( isPathExist(row+1, column) ) return true; // Check D cell 
-			if ( isPathExist(row, column-1) ) return true; // Check L cell 
-			if ( isPathExist(row, column+1) ) return true; // Check R cell 
+			if ( isValidCell(row-1, column) && isPathExist(row-1, column) ) return true; // Check U cell
+			if ( isValidCell(row+1, column) && isPathExist(row+1, column) ) return true; // Check D cell 
+			if ( isValidCell(row, column-1) && isPathExist(row, column-1) ) return true; // Check L cell 
+			if ( isValidCell(row, column+1) && isPathExist(row, column+1) ) return true; // Check R cell 
 			if ( haveBrokenWall == false ) {
 				if ( isWall(row-1, column) ) {
 					// Break U cell
