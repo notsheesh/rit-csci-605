@@ -1,22 +1,13 @@
-public class FindShortestPath {
+public class FindShortestPathCleaned {
     static int[][] maze = {
         { -9, -9, -9, -9, -9, -9, -9 },
         { -9, -1, 00, -1, -1, -1, -9 },
-        { -9, -1, 00, 00, -1, -1, -9 },
-        { -9, 00, 00, 00, 00, 00, -9 },
-        { -1, -1, -1, -1, 00, -1, -9 },
-        { -1, -1, -1, -1, 00, 00, -9 },
+        { -9, -1, -1, -1, -1, -1, -9 },
+        { -9, -1, -1, -1, -1, -1, -9 },
+        { -1, -1, -1, -1, -1, -1, -9 },
+        { -1, -1, -1, -1, -1, -1, -9 },
         { -9, -9, -9, -9, -9, -9, -9 }, };
 
-    // Path doesn't exist
-    // static int[][] maze = {
-    // {-9, -9, -9, -9, -9, -9, -9},
-    // {-9, -1, 00, -1, -1, -1, -9},
-    // {-9, -1, 00, -1, -1, -1, -9},
-    // {-9, -1, 00, -1, -1, -1, -9},
-    // {-1, -1, -1, -1, -1, -1, -9},
-    // {-1, -1, -1, -1, -1, -1, -9},
-    // {-9, -9, -9, -9, -9, -9, -9},};
 
     static int ENTRY_ROW = 1;
     static int ENTRY_COLUMN = 2;
@@ -39,7 +30,7 @@ public class FindShortestPath {
         for ( int row = 0; row < maze.length; row++ ) {
             for ( int column = 0; column < maze[0].length; column++ ) {
                 if ( isOutMaze( row, column ) ) {
-                    System.out.print( 'x' );
+                    System.out.print( 'g' );
                 } else {
                     if ( isWalkable( row, column ) ) {
                         if ( isVisited( row, column ) ) {
@@ -48,7 +39,7 @@ public class FindShortestPath {
                             System.out.print( '.' );
                         }
                     } else {
-                        System.out.print( 'o' );
+                        System.out.print( 'x' );
                     }
                 }
             }
@@ -61,12 +52,12 @@ public class FindShortestPath {
         for ( int row = 0; row < maze.length; row++ ) {
             for ( int column = 0; column < maze[0].length; column++ ) {
                 if ( isOutMaze( row, column ) ) {
-                    System.out.print( 'x' );
+                    System.out.print( 'g' );
                 } else {
                     if ( isWalkable( row, column ) ) {
                         System.out.print( '.' );
                     } else {
-                        System.out.print( 'o' );
+                        System.out.print( 'x' );
                     }
                 }
             }
@@ -78,6 +69,7 @@ public class FindShortestPath {
     private static void debugMaze( int row, int column ) {
         System.out.println( "State @ [" + row + ", " + column + "]" );
         printMaze( maze );
+        System.out.println();
     }
 
     // Current cell checkpoint
@@ -141,7 +133,6 @@ public class FindShortestPath {
         if ( row == ENTRY_ROW && column == ENTRY_COLUMN ) {
             return false;
         }
-
         // Is any neighbouring cell validIndex and IS_OUTSIDE_MAZE
         return isNeighbourCellGoal( row, column );
     }
@@ -163,7 +154,8 @@ public class FindShortestPath {
 
     private static void solveMaze( int startRow, int startColumn ) {
         System.out.println( "Attempting to solve the maze..." );
-        printMaze( maze );
+        printCell("Start ", startRow, startColumn);
+        debugMaze( startRow, startColumn );
         findAllPaths( "", startRow, startColumn );
         if ( allPathsStr.length() > 0 ) {
             System.out.println( "All Paths: " + allPathsStr );
@@ -189,59 +181,43 @@ public class FindShortestPath {
                     shortestPathStr = pathStr;
                 }
             }
-            // System.out.println( "----------------------------------" );
-            // printCell( pathStr, row, column );
-            // debugMaze( row, column );
-            // System.out.println( "Goal found!" );
-            // System.out.println( "----------------------------------" );
+            debugMaze( row, column );
+            printCell("Goal found [" + pathStr + "]", row, column);
             return;
         }
 
-        // Keep trying, go deeper
         visitedCellTracker[row][column] = 1;
-        // System.out.println( "----------------------------------" );
         printCell( "findAllPaths", row, column );
         debugMaze( row, column );
 
-        if ( isValidCell( row - 1, column ) ) { // Check U cell
-            // printCell( "Moving to", row - 1, column );
+        if ( isValidCell( row - 1, column ) ) { // Check Move: U
             pathStr = makeMove( pathStr, 'u' );
-            // System.out.println( "pathStr: " + pathStr );
             findAllPaths( pathStr, row - 1, column );
             pathStr = undoLastMove( pathStr );
             visitedCellTracker[row - 1][column] = 0;
         }
-        if ( isValidCell( row + 1, column ) ) { // Check D
-            // printCell( "Moving to", row + 1, column );
+        if ( isValidCell( row + 1, column ) ) { // Check Move: D
             pathStr = makeMove( pathStr, 'd' );
-            // System.out.println( "pathStr: " + pathStr );
             findAllPaths( pathStr, row + 1, column );
             pathStr = undoLastMove( pathStr );
             visitedCellTracker[row + 1][column] = 0;
         }
-        if ( isValidCell( row, column - 1 ) ) { // Check L cell
-            // printCell( "Moving to", row, column - 1 );
+        if ( isValidCell( row, column - 1 ) ) { // Check Move: L
             pathStr = makeMove( pathStr, 'l' );
-            // System.out.println( "pathStr: " + pathStr );
             findAllPaths( pathStr, row, column - 1 );
             pathStr = undoLastMove( pathStr );
             visitedCellTracker[row][column - 1] = 0;
         }
-        if ( isValidCell( row, column + 1 ) ) { // Check R cell
-            // printCell( "Moving to", row, column + 1 );
+        if ( isValidCell( row, column + 1 ) ) { // Check Move: R
             pathStr = makeMove( pathStr, 'r' );
-            // System.out.println( "pathStr: " + pathStr );
             findAllPaths( pathStr, row, column + 1 );
             pathStr = undoLastMove( pathStr );
             visitedCellTracker[row][column + 1] = 0;
         }
-        // System.out.println( "Covered all options" );
-        // printCell( "Nowhere else to go from", row, column );
         return;
     }
 
     public static void main(String[] args ) {
-        // System.out.println();
         solveMaze( ENTRY_ROW, ENTRY_COLUMN );
     }
 }
