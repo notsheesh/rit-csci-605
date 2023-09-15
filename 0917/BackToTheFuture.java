@@ -143,6 +143,16 @@ public class BackToTheFuture {
         return userGuess;
     }
 
+    private static String evaluate(String userGuess, String wordToBeGuessed){
+        String matchString = "";
+        for (int i = 0; i < WORD_LENGTH; i++) {
+            if(userGuess.charAt(i) == wordToBeGuessed.charAt(i)){
+                matchString += wordToBeGuessed.charAt(i);
+            }
+        }
+        return matchString;
+    }
+
 
 
     
