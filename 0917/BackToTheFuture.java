@@ -153,6 +153,21 @@ public class BackToTheFuture {
         return matchString;
     }
 
+    private static boolean letUserGuess(String wordToBeGuessed){
+        int attemptsLeft = NUM_TRIES;
+        String userGuess;
+        String matchProgress;
+        while(attemptsLeft-- > 0){
+            System.out.printf("Attempts left: %d", attemptsLeft);
+            userGuess = takeUserInput(attemptsLeft);
+            matchProgress = evaluate(userGuess, wordToBeGuessed);
+            System.out.println("Progress: ", matchProgress);
+            if(matchProgress.equals(wordToBeGuessed)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     
