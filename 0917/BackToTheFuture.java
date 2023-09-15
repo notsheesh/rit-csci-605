@@ -169,7 +169,19 @@ public class BackToTheFuture {
         return false;
     }
 
-
+    private static void playGame(){
+        System.out.println("Back To The Future");
+        printGamePicture();
+        int wordToBeGuessedIndex = generateRandomDictionaryIndex();
+        int wordToBeGuessed = dictionary[wordToBeGuessedIndex].toUpperCase();
+        boolean isUserWin = letUserGuess(wordToBeGuessed);
+        if(isUserWin){
+            System.out.println("You win :)");
+        } else{
+            System.out.println("You lose (:");
+        }
+        updateDictionary();
+    }
     
     public static void main(String args[]){
         String fileName = testDictionaryFileName;
