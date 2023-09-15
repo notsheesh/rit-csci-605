@@ -12,7 +12,7 @@ public class BackToTheFuture {
     private static final String asciiArtFileName = "ascii-art.txt";
     private static String[] dictionary;
     private static int numDictionary;
-    private static final boolean PRETTY_PRINT = false;
+    private static final boolean PRETTY_PRINT = true;
     private static final int NUM_TRIES = 9;
     private static String[] gamePicture = new String[NUM_TRIES * 2];
     private static int numberErrors = 0;
@@ -27,8 +27,8 @@ public class BackToTheFuture {
                 gamePicture[indexPtr++] = fileReader.nextLine();
             }
             if(PRETTY_PRINT){
-                System.out.println("ASCII Art Loaded");
-                printGamePicture();
+                // System.out.println("ASCII Art Loaded");
+                // printGamePicture();
             }
             fileReader.close();
             return true;
@@ -46,9 +46,12 @@ public class BackToTheFuture {
     }
 
     private static void printGamePicture(int numErrors){
+        String hashes = "";
+        System.out.println("\n"+hashes+hashes);
         for(int i = numErrors*2; i < gamePicture.length; i++){
             System.out.println(gamePicture[i]);
         }
+        System.out.println(hashes+hashes+"\n");
     }
 
     private static void printDictionary(){
@@ -94,8 +97,8 @@ public class BackToTheFuture {
             }
             fileReader.close();
             if(PRETTY_PRINT){
-                System.out.println("Dictionary loaded.");
-                printDictionary();
+                // System.out.println("Dictionary loaded.");
+                // printDictionary();
             }
             return true;
         }
@@ -106,7 +109,7 @@ public class BackToTheFuture {
         return false;
     }
 
-    private static String[] updateDictionary(int removeIndex){
+    private static void updateDictionary(int removeIndex){
         String[] updatedDictionary = new String[numDictionary-1];
         int indexPtr = 0;
         for(int i=0; i < numDictionary; i++){
@@ -115,8 +118,10 @@ public class BackToTheFuture {
             }
         }
         numDictionary--;
-        System.out.println("Updated dictionary: ");
         dictionary = updatedDictionary;
+        System.out.println("\nUpdated dictionary: ");
+        printDictionary();
+        System.out.println();
     }
 
     private static int generateRandomDictionaryIndex(){
@@ -124,48 +129,78 @@ public class BackToTheFuture {
         return randomNumberGenerator.nextInt(numDictionary);
     }
 
-    private static boolean isValidWord(String userGuess){
+    private static boolean isValidInput(char userGuess){
         return true;
     }
 
-    private static String takeUserInput(int attemptsLeft){
+    private static char takeUserInput(int attemptsLeft){
         Scanner userInputScanner = new Scanner(System.in);
-        String userGuess;
+        char userGuess;
         do{
             System.out.print("What's your guess? ");
-            userGuess = userInputScanner.nextLine().toUpperCase();
-            if(!isValidWord(userGuess)){
-                System.out.printf(
-                    "Please enter a %d letter word", WORD_LENGTH
-                    );
+            userGuess = userInputScanner.next().toUpperCase().charAt(0);
+            if(!isValidInput(userGuess)){
+                System.out.printf("Please enter a valid letter");
             }
-        } while (!isValidWord(userGuess));
+        } while (!isValidInput(userGuess));
         return userGuess;
     }
 
-    private static String evaluate(String userGuess, String wordToBeGuessed){
-        String matchString = "";
-        for (int i = 0; i < WORD_LENGTH; i++) {
-            if(userGuess.charAt(i) == wordToBeGuessed.charAt(i)){
-                matchString += wordToBeGuessed.charAt(i);
+    private static String generateHint(char guess, String answer, String hint){
+        boolean flag = false;
+        String newHint = "";
+        for(int i = 0; i < WORD_LENGTH; i++){
+            if(hint.charAt(i) != '_'){
+                newHint += hint.charAt(i);
+            }
+            else if(guess == answer.charAt(i) && flag == false){
+                newHint += guess;
+                flag = true;
             }
             else{
-                matchString += "_";
+                newHint += '_';
             }
         }
-        return matchString;
+        return newHint;
     }
 
+    private static int updateAttemptsLeft(
+        String hint, String newHint, int attemptsLeft){
+            if(newHint.equals(hint)){
+                System.out.printf("Nope, try again!");
+                return attemptsLeft - 1;
+            }
+            else{
+                System.out.printf("Good job!");
+                return attemptsLeft;
+            }
+    }
     private static boolean letUserGuess(String wordToBeGuessed){
         int attemptsLeft = NUM_TRIES;
-        String userGuess;
-        String matchProgress;
-        while(attemptsLeft-- > 0){
-            System.out.printf("Attempts left: %d", attemptsLeft);
+        char userGuess;
+        String hint = "_____";
+        String newHint;
+        int numErrors = NUM_TRIES - attemptsLeft;
+        while(attemptsLeft > 0){
+            // New level 
+            System.out.printf("\nAttempts left: %d | ", attemptsLeft);
+
+            // Take user input
             userGuess = takeUserInput(attemptsLeft);
-            matchProgress = evaluate(userGuess, wordToBeGuessed);
-            System.out.println("Progress: ", matchProgress);
-            if(matchProgress.equals(wordToBeGuessed)){
+
+            // Check user input and generate hint
+            newHint = generateHint(userGuess, wordToBeGuessed, hint);
+
+            // Update progress and attempts left
+            attemptsLeft = updateAttemptsLeft(hint, newHint, attemptsLeft);
+            System.out.printf(" | Progress: %s\n", newHint);
+            hint = newHint;
+
+            // Display game picture
+            numErrors = NUM_TRIES - attemptsLeft;
+            printGamePicture(numErrors);
+
+            if(hint.equals(wordToBeGuessed)){
                 return true;
             }
         }
@@ -173,26 +208,45 @@ public class BackToTheFuture {
     }
 
     private static void playGame(){
-        System.out.println("Back To The Future");
+        int wordToBeGuessedIndex;
+        String wordToBeGuessed;
+        String hashes = "###########################";
+        System.out.println(hashes+hashes);
+        System.out.println("\t\t   Back To The Future");
+        System.out.println(hashes+hashes);
+       
+        // Game picture
         printGamePicture();
-        int wordToBeGuessedIndex = generateRandomDictionaryIndex();
-        int wordToBeGuessed = dictionary[wordToBeGuessedIndex].toUpperCase();
-        boolean isUserWin = letUserGuess(wordToBeGuessed);
-        if(isUserWin){
-            System.out.println("You win :)");
-        } else{
-            System.out.println("You lose (:");
+
+        // Pick a random word from dictionary
+        wordToBeGuessedIndex = generateRandomDictionaryIndex();
+        wordToBeGuessed = dictionary[wordToBeGuessedIndex].toUpperCase();
+
+        if(PRETTY_PRINT){
+            System.out.printf("\n[PRETTY_PRINT = true]" + 
+            " Answer: %s\n", wordToBeGuessed);
         }
-        updateDictionary();
+
+        // Let user guess for NUM_TRIES 
+        boolean isUserWin = letUserGuess(wordToBeGuessed);
+ 
+        // Report outcome of game
+        if(isUserWin){
+            System.out.println("\nYou win :)");
+        } else{
+            System.out.println("\nYou lose (:");
+            System.out.println("The word was " + wordToBeGuessed);
+        }
+
+        updateDictionary(wordToBeGuessedIndex);
     }
     
     public static void main(String args[]){
         String fileName = testDictionaryFileName;
         if(isLoadDictionary(fileName) && isLoadAsciiArt()){
-            // while(isWordLeft()){
-            //     playGame();
-            // }
-            playGame();
-        }
+            while(isWordLeft()){
+                playGame();
+            }
+        }        
     }
 }
