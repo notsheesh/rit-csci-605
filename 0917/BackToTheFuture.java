@@ -106,6 +106,19 @@ public class BackToTheFuture {
         return false;
     }
 
+    private static String[] updateDictionary(int removeIndex){
+        String[] updatedDictionary = new String[numDictionary-1];
+        int indexPtr = 0;
+        for(int i=0; i < numDictionary; i++){
+            if(i != removeIndex){
+                updatedDictionary[indexPtr++] = dictionary[i];
+            }
+        }
+        numDictionary--;
+        System.out.println("Updated dictionary: ");
+        dictionary = updatedDictionary;
+    }
+
 
 
 
