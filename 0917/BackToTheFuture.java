@@ -119,6 +119,29 @@ public class BackToTheFuture {
         dictionary = updatedDictionary;
     }
 
+    private static int generateRandomDictionaryIndex(){
+        Random randomNumberGenerator = new Random();
+        return randomNumberGenerator.nextInt(numDictionary);
+    }
+
+    private static boolean isValidWord(String userGuess){
+        return true;
+    }
+
+    private static String takeUserInput(int attemptsLeft){
+        Scanner userInputScanner = new Scanner(System.in);
+        String userGuess;
+        do{
+            System.out.print("What's your guess? ");
+            userGuess = userInputScanner.nextLine().toUpperCase();
+            if(!isValidWord(userGuess)){
+                System.out.printf(
+                    "Please enter a %d letter word", WORD_LENGTH
+                    );
+            }
+        } while (!isValidWord(userGuess));
+        return userGuess;
+    }
 
 
 
