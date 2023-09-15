@@ -3,16 +3,13 @@ import java.io.FileNotFoundException; // File not found handlers
 import java.util.Scanner; // Scanner class to read text files
 import java.util.Random;
 
-import javax.annotation.processing.FilerException;
-import javax.print.attribute.standard.NumberOfDocuments;
-
 public class BackToTheFuture {
     private static final String dictionaryFileName = "dictionary.txt";
     private static final String testDictionaryFileName = "test-dictionary.txt";
     private static final String asciiArtFileName = "ascii-art.txt";
     private static String[] dictionary;
     private static int numDictionary;
-    private static final boolean PRETTY_PRINT = true;
+    private static final boolean PRETTY_PRINT = false;
     private static final int NUM_TRIES = 9;
     private static String[] gamePicture = new String[NUM_TRIES * 2];
     private static int numberErrors = 0;
@@ -40,18 +37,19 @@ public class BackToTheFuture {
     }
     
     private static void printGamePicture(){
+        System.out.println();
         for(int i = 0; i < gamePicture.length; i++){
             System.out.println(gamePicture[i]);
         }
+        System.out.println();
     }
 
     private static void printGamePicture(int numErrors){
-        String hashes = "";
-        System.out.println("\n"+hashes+hashes);
+        System.out.println();
         for(int i = numErrors*2; i < gamePicture.length; i++){
             System.out.println(gamePicture[i]);
         }
-        System.out.println(hashes+hashes+"\n");
+        System.out.println();
     }
 
     private static void printDictionary(){
@@ -183,7 +181,7 @@ public class BackToTheFuture {
         int numErrors = NUM_TRIES - attemptsLeft;
         while(attemptsLeft > 0){
             // New level 
-            System.out.printf("\nAttempts left: %d | ", attemptsLeft);
+            System.out.printf("Attempts left: %d | ", attemptsLeft);
 
             // Take user input
             userGuess = takeUserInput(attemptsLeft);
@@ -214,9 +212,6 @@ public class BackToTheFuture {
         System.out.println(hashes+hashes);
         System.out.println("\t\t   Back To The Future");
         System.out.println(hashes+hashes);
-       
-        // Game picture
-        printGamePicture();
 
         // Pick a random word from dictionary
         wordToBeGuessedIndex = generateRandomDictionaryIndex();
@@ -226,6 +221,13 @@ public class BackToTheFuture {
             System.out.printf("\n[PRETTY_PRINT = true]" + 
             " Answer: %s\n", wordToBeGuessed);
         }
+        else{
+            System.out.printf("\n[PRETTY_PRINT = false]" + 
+            " Answer: *****\n");
+        }
+
+        // Game picture
+        printGamePicture();
 
         // Let user guess for NUM_TRIES 
         boolean isUserWin = letUserGuess(wordToBeGuessed);
@@ -242,7 +244,13 @@ public class BackToTheFuture {
     }
     
     public static void main(String args[]){
-        String fileName = testDictionaryFileName;
+        if(args.length != 1){
+            System.out.println("Please enter the filename");
+            return;
+        }
+        
+        // String fileName = testDictionaryFileName;
+        String fileName = args[0];
         if(isLoadDictionary(fileName) && isLoadAsciiArt()){
             while(isWordLeft()){
                 playGame();
