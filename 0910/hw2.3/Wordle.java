@@ -27,7 +27,7 @@ public class Wordle {
     private static final int WORD_LENGTH = 5;
     private static final int NUM_TRIES = 5;
     private static String[] dictionary;
-    private static String fileName = "dictionary.txt";
+    private static String fileName = "5_char_word.txt";
     private static boolean DEBUG = false;
 
     /**
@@ -363,7 +363,7 @@ public class Wordle {
         }
 
         if (DEBUG) {
-            fileName = "test-dictionary.txt";
+            fileName = "test-5_char_word.txt";
         }
 
         if (isLoadDictionary(fileName)) {
