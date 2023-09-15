@@ -149,6 +149,9 @@ public class BackToTheFuture {
             if(userGuess.charAt(i) == wordToBeGuessed.charAt(i)){
                 matchString += wordToBeGuessed.charAt(i);
             }
+            else{
+                matchString += "_";
+            }
         }
         return matchString;
     }
