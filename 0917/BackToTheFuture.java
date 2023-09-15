@@ -45,6 +45,67 @@ public class BackToTheFuture {
         }
     }
 
+    private static void printGamePicture(int numErrors){
+        for(int i = numErrors*2; i < gamePicture.length; i++){
+            System.out.println(gamePicture[i]);
+        }
+    }
+
+    private static void printDictionary(){
+        System.out.print("Dictionary: ");
+        for(int i = 0; i<numDictionary; i++){
+            if(i != numDictionary-1){
+                System.out.printf("%s, ", dictionary[i]);
+            }
+            else{
+                System.out.println(dictionary[i]);
+            }
+        }
+    }
+
+    private static boolean isWordLeft(){
+        return dictionary.length != 0;
+    }
+
+    private static boolean isLoadDictionary(String fileName){
+        try{
+            File dictionaryFileObject = new File(fileName);
+            Scanner fileReader = new Scanner(dictionaryFileObject);
+
+            // Get number of words in dictionary 
+            String numDictionaryStr = fileReader.nextLine();
+            numDictionary = Integer.parseInt(numDictionaryStr);
+
+            // Initialize dictionary of the given size
+            dictionary = new String[numDictionary];
+
+            // Populate dictionary 
+            int indexPtr = 0;
+            while(fileReader.hasNextLine()){
+                if(indexPtr < numDictionary){
+                    String wordInFileLine = fileReader.nextLine();
+                    dictionary[indexPtr++] = wordInFileLine;
+                } else{
+                    if(PRETTY_PRINT){
+                        System.out.println("More words than expected.");
+                    }
+                    break;
+                }
+            }
+            fileReader.close();
+            if(PRETTY_PRINT){
+                System.out.println("Dictionary loaded.");
+                printDictionary();
+            }
+            return true;
+        }
+        catch(FileNotFoundException e){
+            System.out.println("File not found");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 
 
