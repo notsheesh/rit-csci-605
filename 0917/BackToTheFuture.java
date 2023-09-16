@@ -1,12 +1,12 @@
 /**
  * This program implements the popular internet game HANGMAN with a slight twist
- * Instead of a hangman its theme is inspired by famous movie "Back To The 
+ * Instead of a hangman its theme is inspired by the famous movie "Back To The 
  * Future". 
  * Filename: BackToTheFuture.java
  * Version: 3.0
  * Revision Log:
  *      Version 1.0 - Initial Creation. Date: Sep 11, 2023
- *      Version 2.0 - Add required logic for word matching. Date: Sep 14, 2023
+ *      Version 2.0 - Add logic for word matching. Date: Sep 14, 2023
  *      Version 3.0 - Final changes in formatting. Date: Sep 16, 2023
  */
 
@@ -71,7 +71,7 @@ public class BackToTheFuture {
     }
 
     /**
-     * Ensures that the ascii art being read from file storage correctly.
+     * Ensures that the ascii art is being read from file storage correctly.
      * Prints each entry in the <em>gamePicture</em> array in a new line.
      *
      * @author Kyle Burke, Shreesh Tripathi
