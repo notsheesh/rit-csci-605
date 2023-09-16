@@ -9,7 +9,7 @@ public class BackToTheFuture {
     private static final String asciiArtFileName = "ascii-art.txt";
     private static String[] dictionary;
     private static int numDictionary;
-    private static final boolean PRETTY_PRINT = false;
+    private static boolean PRETTY_PRINT = false;
     private static final int NUM_TRIES = 9;
     private static String[] gamePicture = new String[NUM_TRIES * 2];
     private static int numberErrors = 0;
@@ -153,7 +153,7 @@ public class BackToTheFuture {
             }
             else if(guess == answer.charAt(i) && flag == false){
                 newHint += guess;
-                flag = true;
+                // flag = true;
             }
             else{
                 newHint += '_';
@@ -244,13 +244,16 @@ public class BackToTheFuture {
     }
     
     public static void main(String args[]){
-        if(args.length != 1){
+        if(args.length == 0){
             System.out.println("Please enter the filename");
             return;
         }
         
         // String fileName = testDictionaryFileName;
         String fileName = args[0];
+        Boolean isPrettyPrint = Boolean.parseBoolean(args[1]);
+        PRETTY_PRINT = isPrettyPrint;
+
         if(isLoadDictionary(fileName) && isLoadAsciiArt()){
             while(isWordLeft()){
                 playGame();
