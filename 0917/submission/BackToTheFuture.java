@@ -442,6 +442,13 @@ public class BackToTheFuture {
         if ( isLoadDictionary ( fileName ) && isLoadAsciiArt () ) {
             while ( isDictionaryEmpty () ) {
                 playGame () ;
+                char isPlayAgain = 'n';
+                Scanner usrInpSc = new Scanner ( System.in ) ;
+                System.out.println( "Do you want to continue? (Y/N):" );
+                isPlayAgain = usrInpSc.next().toUpperCase().charAt( 0 );
+                if ( isPlayAgain == 'N' ) {
+                    break;
+                }
             }
         }
     }
