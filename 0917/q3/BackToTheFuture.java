@@ -127,7 +127,7 @@ public class BackToTheFuture {
      * @author Kyle Burke, Shreesh Tripathi
      */
     private static boolean isDictionaryEmpty () {
-        return dictionary.length != 0;
+        return dictionary.length == 0;
     }
 
     /**
@@ -206,8 +206,10 @@ public class BackToTheFuture {
         }
         numDictionary--;
         dictionary = updatedDictionary;
-        System.out.println ( "\nUpdated dictionary: " ) ;
-        printDictionary () ;
+        if ( PRETTY_PRINT ) {            
+            System.out.println ( "\nUpdated dictionary: " ) ;
+            printDictionary () ;
+        }
         System.out.println () ;
     }
 
@@ -436,18 +438,27 @@ public class BackToTheFuture {
 
         // String fileName = testDictionaryFileName;
         String fileName = args[0];
-        Boolean isPrettyPrint = Boolean.parseBoolean ( args[1] ) ;
-        PRETTY_PRINT = isPrettyPrint;
+        if ( args.length == 2 ) {
+            Boolean isPrettyPrint = Boolean.parseBoolean ( args[1] ) ;
+            PRETTY_PRINT = isPrettyPrint;
+        }
+
 
         if ( isLoadDictionary ( fileName ) && isLoadAsciiArt () ) {
-            while ( isDictionaryEmpty () ) {
+            while ( !isDictionaryEmpty () ) {
                 playGame () ;
-                char isPlayAgain = 'n';
-                Scanner usrInpSc = new Scanner ( System.in ) ;
-                System.out.println( "Do you want to continue? (Y/N):" );
-                isPlayAgain = usrInpSc.next().toUpperCase().charAt( 0 );
-                if ( isPlayAgain == 'N' ) {
-                    break;
+                if ( !isDictionaryEmpty () ) {
+                    char isPlayAgain = 'n';
+                    Scanner usrInpSc = new Scanner ( System.in ) ;
+                    System.out.println( "Do you want to continue? (Y/N):" );
+                    isPlayAgain = usrInpSc.next().toUpperCase().charAt( 0 );
+                    if ( isPlayAgain == 'N' ) {
+                        break;
+                    }
+                } else {
+                    if ( PRETTY_PRINT ) {
+                        System.out.println("No words left.");
+                    }
                 }
             }
         }
