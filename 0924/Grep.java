@@ -1,3 +1,14 @@
+/**
+ * Description: Grep class for searching patterns in text using regular 
+ * expressions.
+ *
+ * Filename: Grep.java
+ * 
+ *
+ * Version: 1.0
+ * Revision Log:
+ *      Version 1.0 - Initial creation. Date: Sept 23, 2023.
+ */
 import java.util.Scanner; // Scanner class for reading words
 import java.io.File; // File class for reading from grep.txt
 import java.io.FileNotFoundException; // Exception handler for file reading
@@ -8,6 +19,11 @@ public class Grep {
     private String[] wordsArr = new String[BUFFER];
     int count = 0;
 
+    /**
+     * Counts the number of lines in the specified file.
+     * 
+     * @return The number of lines in the file.
+     */
     private int countNumLines() {
         try {
 
@@ -24,6 +40,9 @@ public class Grep {
         return count;
     }
 
+    /**
+     * Prints the data read from the file.
+     */
     private void printFileData() {
         System.out.printf("File Data: ");
         for (int i = 0; i < wordsArr.length; i++) {
@@ -32,6 +51,9 @@ public class Grep {
         System.out.println("\n");
     }
 
+    /**
+     * Reads data from the file and stores it in the wordsArr array.
+     */
     private void readFromFile() {
         wordsArr = new String[countNumLines()];
         try {
@@ -47,9 +69,12 @@ public class Grep {
         }
     }
 
+    /**
+     * Takes user input for phrases to be checked, separated by commas.
+     */
     private void takeUserInput() {
         System.out.println("Enter phrases to be checked, " +
-                            "each separated by a ',': ");
+                "each separated by a ',': ");
         System.out.print("> ");
         Scanner sc = new Scanner(System.in);
 
@@ -64,6 +89,12 @@ public class Grep {
         }
     }
 
+    /**
+     * Main method for Grep class, responsible for reading user input and 
+     * processing patterns.
+     * 
+     * @param args Command line arguments (optional).
+     */
     public static void main(String[] args) {
         Grep g = new Grep();
         if (args.length > 0 && Boolean.parseBoolean(args[0])) {
@@ -77,17 +108,31 @@ public class Grep {
     }
 }
 
+/**
+ * Class for defining pattern matching methods.
+ */
 class Pattern {
     boolean TEST_ONLY_ONE = false;
 
     public Pattern() {
     }
 
+    /**
+     * Converts a word to a character array.
+     * 
+     * @param word The word to convert.
+     * @return The character array.
+     */
     private char[] convertToCharArray(String word) {
         return word.toCharArray();
 
     }
 
+    /**
+     * Process the provided array of strings to check for patterns.
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public void processStrings(String[] wordsArr) {
         System.out.println("Testing");
         for (int i = 0; i < wordsArr.length; i++) {
@@ -149,13 +194,18 @@ class Pattern {
                     continue;
                 }
             }
-            if(noMatch){
+            if (noMatch) {
                 System.out.println("\nNo match");
             }
             System.out.println();
         }
     }
 
+    /**
+     * FSM for the regex pattern: ^ab$
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean ab(char[] charArr) {
         // q0 = start state
         // qe = error state
@@ -186,6 +236,11 @@ class Pattern {
         return state.equals("q2");
     }
 
+    /**
+     * FSM for the regex pattern: .a+b.
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean xaabb(char[] charArr) {
         // q0 = start state
         // qe = error state
@@ -219,6 +274,11 @@ class Pattern {
         return state.equals("q4");
     }
 
+    /**
+     * FSM for the regex pattern: .ab.
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean xaby(char[] charArr) {
         // q0 = start state
         // qe = error state
@@ -250,6 +310,11 @@ class Pattern {
         return state.equals("q4");
     }
 
+    /**
+     * FSM for the regex pattern: ^[ab]c$
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean ac1(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
@@ -274,6 +339,11 @@ class Pattern {
         return state.equals("q2");
     }
 
+    /**
+     * FSM for the regex pattern: ^[ab]?c$
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean ac2(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
@@ -300,6 +370,11 @@ class Pattern {
         return state.equals("q2");
     }
 
+    /**
+     * FSM for the regex pattern: ^[ab]?|c?$
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean ac3(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
@@ -318,6 +393,11 @@ class Pattern {
         return state.equals("q0") || state.equals("q1");
     }
 
+    /**
+     * FSM for the regex pattern: ^..\2\1$
+     * 
+     * @param wordsArr The array of strings to process.
+     */
     public boolean abba(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
