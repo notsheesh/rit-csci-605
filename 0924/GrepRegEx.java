@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern; // Pattern matching
 
+
 public class GrepRegEx {
     public String vowelsConsonants;
     public String palindrome4Or5;
@@ -11,9 +12,9 @@ public class GrepRegEx {
     public String nknl;
     private String fileName = "input.txt";
     private final String patternsFileName = "patterns.txt";
-    private int numStrings = 10000;
+    private int numWords = 10000;
     private String delimiter = "";
-    private String[] wordsArr = new String[numStrings];
+    private String[] wordsArr = new String[numWords];
 
     private void parseConsoleArguments(String[] args) {
         for (int i = 0; i < args.length; i++) {
@@ -51,23 +52,19 @@ public class GrepRegEx {
         return true;
     }
 
-    private int countNumWords(String delimiter) {
+    private int countNumWords() {
         int count = 0;
         try {
             Scanner fileSc = new Scanner(new File(fileName));
-            if (delimiter.length() > 0) {
-                // System.out.printf("\nUsing delimiter: %s\n", delimiter);
-                fileSc.useDelimiter(delimiter);
-            }
-            while (fileSc.hasNext()) {
-                String word = fileSc.next().trim();
+            while (fileSc.hasNextLine()) {
+                fileSc.nextLine();
                 // System.out.printf("\nWord read: %s", word);
                 count++;
             }
             fileSc.close();
         } catch (FileNotFoundException e) {
             System.out.println("No such file exists ");
-            // e.printStackTrace();
+            e.printStackTrace();
         }
         return count;
     }
@@ -96,11 +93,21 @@ public class GrepRegEx {
     }
 
     private boolean readWordsFromFile(String delimiter){
-        numStrings = countNumWords(delimiter);
-        // System.out.println("Number of words " + Integer.toString(numStrings));
-        wordsArr = new String[numStrings];
         try {
             Scanner fileSc = new Scanner(new File(fileName));
+            if(delimiter != ""){
+                wordsArr = fileSc.nextLine().split(delimiter);
+                for (int i = 0; i < wordsArr.length; i++) {
+                    wordsArr[i] = wordsArr[i].trim();
+                }
+            } else {
+                numWords = countNumWords();
+                wordsArr = new String[numWords];
+                int i = 0;
+                while(fileSc.hasNextLine()){
+                    wordsArr[i++] = fileSc.nextLine().trim();
+                }
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -109,7 +116,7 @@ public class GrepRegEx {
     }
 
     private void matchAllPatterns() {
-        System.out.println("\nPattern Matching: ");
+        System.out.println("\n\nPattern Matching: ");
         for (int i = 0; i < wordsArr.length; i++) {
             String word = wordsArr[i];
             System.out.printf("\n--------{%s}---------\n", word);
@@ -140,15 +147,23 @@ public class GrepRegEx {
                 if(grex.readWordsFromStdin()){
                     grex.matchAllPatterns();
                 } 
-            } else if (args.length == 4) {
+            } else if (args.length == 4){
                 // Set delimiter and file name
                 grex.parseConsoleArguments(args);
-                if(grex.readWordsFromFile(null)){
+                System.out.println("Delimiter: '" + grex.delimiter + "'");
+                System.out.println("Input file: " + grex.fileName);
+                if(grex.readWordsFromFile(grex.delimiter)){
+                    grex.printWordsArr();
                     grex.matchAllPatterns();
                 }
             } else {
-                System.out.println("Enter valid arguments.");
-                return;
+                System.out.println("Default settings");
+                System.out.println("Delimiter: '" + grex.delimiter + "'");
+                System.out.println("Input file: " + grex.fileName);
+                if(grex.readWordsFromFile(grex.delimiter)){
+                    grex.printWordsArr();
+                    grex.matchAllPatterns();
+                }
             }
         }
     }
