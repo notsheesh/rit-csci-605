@@ -48,8 +48,11 @@ public class Grep {
     }
 
     private void takeUserInput() {
-        System.out.print("Enter words: ");
+        System.out.println("Enter phrases to be checked, " +
+                            "each separated by a ',': ");
+        System.out.print("> ");
         Scanner sc = new Scanner(System.in);
+
         try {
             wordsArr = sc.nextLine().split(",");
             for (int i = 0; i < wordsArr.length; i++) {
@@ -159,28 +162,28 @@ class Pattern {
         // q2 = final state
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 if (charArr[i] == 'a') {
                     state = "q1";
                 } else {
                     state = "qe";
                     break;
                 }
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 if (charArr[i] == 'b') {
                     state = "q2";
                 } else {
                     state = "qe";
                     break;
                 }
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 state = "qe";
                 break;
             }
         }
-        return state == "q2";
+        return state.equals("q2");
     }
 
     public boolean xaabb(char[] charArr) {
@@ -189,17 +192,17 @@ class Pattern {
         // q3 = final state
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 state = "q1";
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 if (charArr[i] == 'a') {
                     state = "q2";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 if (charArr[i] == 'a') {
                     state = "q2";
                 } else if (charArr[i] == 'b') {
@@ -207,13 +210,13 @@ class Pattern {
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q3") {
+            } else if (state.equals("q3")) {
                 state = "q4";
-            } else if (state == "q4") {
+            } else if (state.equals("q4")) {
                 state = "qe";
             }
         }
-        return state == "q4";
+        return state.equals("q4");
     }
 
     public boolean xaby(char[] charArr) {
@@ -222,61 +225,61 @@ class Pattern {
         // q4 = final state
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 state = "q1";
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 if (charArr[i] == 'a') {
                     state = "q2";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 if (charArr[i] == 'b') {
                     state = "q3";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q3") {
+            } else if (state.equals("q3")) {
                 state = "q4";
-            } else if (state == "q4") {
+            } else if (state.equals("q4")) {
                 state = "qe";
             }
         }
-        return state == "q4";
+        return state.equals("q4");
     }
 
     public boolean ac1(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 if (charArr[i] == 'a' || charArr[i] == 'b') {
                     state = "q1";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 if (charArr[i] == 'c') {
                     state = "q2";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 state = "qe";
             }
         }
-        return state == "q2";
+        return state.equals("q2");
     }
 
     public boolean ac2(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 if (charArr[i] == 'a' || charArr[i] == 'b') {
                     state = "q1";
                 } else if (charArr[i] == 'c') {
@@ -284,62 +287,62 @@ class Pattern {
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 if (charArr[i] == 'c') {
                     state = "q2";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 state = "qe";
             }
         }
-        return state == "q2";
+        return state.equals("q2");
     }
 
     public boolean ac3(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 if (charArr[i] == 'a' || charArr[i] == 'b' || charArr[i] == 'c') {
                     state = "q1";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 state = "qe";
             }
         }
-        return state == "q0" || state == "q1";
+        return state.equals("q0") || state.equals("q1");
     }
 
     public boolean abba(char[] charArr) {
         String state = "q0";
         for (int i = 0; i < charArr.length; i++) {
-            if (state == "qe") {
+            if (state.equals("qe")) {
                 return false;
-            } else if (state == "q0") {
+            } else if (state.equals("q0")) {
                 state = "q1";
-            } else if (state == "q1") {
+            } else if (state.equals("q1")) {
                 state = "q2";
-            } else if (state == "q2") {
+            } else if (state.equals("q2")) {
                 if (charArr[i] == charArr[1]) {
                     state = "q3";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q3") {
+            } else if (state.equals("q3")) {
                 if (charArr[i] == charArr[0]) {
                     state = "q4";
                 } else {
                     state = "qe";
                 }
-            } else if (state == "q4") {
+            } else if (state.equals("q4")) {
                 state = "qe";
             }
         }
-        return state == "q4";
+        return state.equals("q4");
     }
 }

@@ -1,15 +1,17 @@
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.util.Scanner; // IO
+import java.io.File; // File input
+import java.io.FileNotFoundException; // Exception handling
 import java.util.regex.Pattern; // Pattern matching
 
 
 public class GrepRegEx {
+
     public String vowelsConsonants;
     public String palindrome4Or5;
     public String palindrome1Or30;
     public String ddmmyy;
     public String nknl;
+
     private String fileName = "input.txt";
     private final String patternsFileName = "patterns.txt";
     private int numWords = 10000;
@@ -29,22 +31,25 @@ public class GrepRegEx {
     private void printPatterns() {
         System.out.println("Patterns: ");
         System.out.println(vowelsConsonants);
-        System.out.println(palindrome1Or30);
+        System.out.println();
         System.out.println(palindrome4Or5);
+        System.out.println();
+        System.out.println(palindrome1Or30);
+        System.out.println();
         System.out.println(ddmmyy);
+        System.out.println();
         System.out.println(nknl);
+        System.out.println();
     }
 
     private boolean loadPatternsFromFile() {
         try {
             Scanner sc = new Scanner(new File(patternsFileName));
-            while (sc.hasNextLine()) {
-                vowelsConsonants = sc.nextLine();
-                palindrome1Or30 = sc.nextLine();
-                palindrome4Or5 = sc.nextLine();
-                ddmmyy = sc.nextLine();
-                nknl = sc.nextLine();
-            }
+            vowelsConsonants = sc.nextLine();
+            palindrome4Or5 = sc.nextLine();
+            palindrome1Or30 = sc.nextLine();
+            ddmmyy = sc.nextLine();
+            nknl = sc.nextLine();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -74,11 +79,14 @@ public class GrepRegEx {
         for (int i = 0; i < wordsArr.length; i++) {
             System.out.printf("%s, ", wordsArr[i]);
         }
+        System.out.println();
     }
 
     private boolean readWordsFromStdin() {
         try {
-            System.out.print("Enter words: ");
+            System.out.println("Enter phrases to be checked, " +
+                            "each separated by a ',': ");
+            System.out.print("> ");
             Scanner stdinSc = new Scanner(System.in);   
             wordsArr = stdinSc.nextLine().split(",");
             for (int i = 0; i < wordsArr.length; i++) {
@@ -116,24 +124,25 @@ public class GrepRegEx {
     }
 
     private void matchAllPatterns() {
+        // printPatterns();    
         System.out.println("\n\nPattern Matching: ");
         for (int i = 0; i < wordsArr.length; i++) {
             String word = wordsArr[i];
             System.out.printf("\n--------{%s}---------\n", word);
             if (Pattern.matches(vowelsConsonants, word)) {
-                System.out.println("Ordered Vowels\n");
+                System.out.println("Ordered Vowels");
             }
             if (Pattern.matches(palindrome4Or5, word)) {
-                System.out.println("Palindrome {4,5}\n");
+                System.out.println("Palindrome {4,5}");
             }
             if (Pattern.matches(palindrome1Or30, word)) {
-                System.out.println("Palindrome {1,30}\n");
+                System.out.println("Palindrome {1,30}");
             }
             if (Pattern.matches(ddmmyy, word)) {
-                System.out.println("DD/MM/YY or MM/DD/YY\n");
+                System.out.println("DD/MM/YY or MM/DD/YY");
             }
             if (Pattern.matches(nknl, word)) {
-                System.out.println("[n-k]|(nl)\n");
+                System.out.println("[n-k]|(nl)");
             }
         }
     }
