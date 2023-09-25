@@ -1,3 +1,15 @@
+/**
+ * Description: GrepRegEx class for pattern matching in text input.
+ *
+ * Filename: GrepRegEx.java
+ * 
+ * @author Kyle Burke
+ * @author Shreesh Tripathi
+ * 
+ * Version: 1.0
+ * Revision Log:
+ *      Version 1.0 - Initial creation. Date: Sept 24th, 2023
+ */
 import java.util.Scanner; // IO
 import java.io.File; // File input
 import java.io.FileNotFoundException; // Exception handling
@@ -18,6 +30,11 @@ public class GrepRegEx {
     private String delimiter = "";
     private String[] wordsArr = new String[numWords];
 
+    /**
+     * Parses command-line arguments to set delimiter and input file name.
+     *
+     * @param args Command-line arguments
+     */
     private void parseConsoleArguments(String[] args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-d")) {
@@ -28,6 +45,9 @@ public class GrepRegEx {
         }
     }
 
+    /**
+     * Prints the loaded patterns for pattern matching.
+     */
     private void printPatterns() {
         System.out.println("Patterns: ");
         System.out.println(vowelsConsonants);
@@ -42,6 +62,11 @@ public class GrepRegEx {
         System.out.println();
     }
 
+    /**
+     * Loads patterns from a patterns file.
+     *
+     * @return True if patterns are successfully loaded, false otherwise.
+     */
     private boolean loadPatternsFromFile() {
         try {
             Scanner sc = new Scanner(new File(patternsFileName));
@@ -57,6 +82,11 @@ public class GrepRegEx {
         return true;
     }
 
+    /**
+     * Counts the number of words in the input file.
+     *
+     * @return The number of words in the input file.
+     */
     private int countNumWords() {
         int count = 0;
         try {
@@ -74,6 +104,9 @@ public class GrepRegEx {
         return count;
     }
 
+    /**
+     * Prints the words array for debugging purposes.
+     */
     private void printWordsArr(){
         System.out.print("Words Array: ");
         for (int i = 0; i < wordsArr.length; i++) {
@@ -82,6 +115,11 @@ public class GrepRegEx {
         System.out.println();
     }
 
+    /**
+     * Reads phrases to be checked from standard input.
+     *
+     * @return True if phrases are successfully read, false otherwise.
+     */
     private boolean readWordsFromStdin() {
         try {
             System.out.println("Enter phrases to be checked, " +
@@ -100,6 +138,12 @@ public class GrepRegEx {
         return true;
     }
 
+    /**
+     * Reads words from an input file, splitting by the specified delimiter if provided.
+     *
+     * @param delimiter Delimiter for splitting words (if empty, reads whole lines as words)
+     * @return True if words are successfully read, false otherwise.
+     */
     private boolean readWordsFromFile(String delimiter){
         try {
             Scanner fileSc = new Scanner(new File(fileName));
@@ -123,6 +167,9 @@ public class GrepRegEx {
         return true;
     }
 
+    /**
+     * Matches all loaded patterns against the words array.
+     */
     private void matchAllPatterns() {
         // printPatterns();    
         System.out.println("\n\nPattern Matching: ");
@@ -147,6 +194,11 @@ public class GrepRegEx {
         }
     }
 
+    /**
+     * Main method for running the GrepRegEx program.
+     *
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) {
         GrepRegEx grex = new GrepRegEx();
         // Load patterns

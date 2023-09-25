@@ -4,6 +4,8 @@
  *
  * Filename: Grep.java
  * 
+ * @author Kyle Burke
+ * @author Shreesh Tripathi
  *
  * Version: 1.0
  * Revision Log:
@@ -109,7 +111,7 @@ public class Grep {
 }
 
 /**
- * Class for defining pattern matching methods.
+ * Class for pattern matching FSM.
  */
 class Pattern {
     boolean TEST_ONLY_ONE = false;
@@ -381,7 +383,8 @@ class Pattern {
             if (state.equals("qe")) {
                 return false;
             } else if (state.equals("q0")) {
-                if (charArr[i] == 'a' || charArr[i] == 'b' || charArr[i] == 'c') {
+                char ch = charArr[i];
+                if (ch == 'a' || ch == 'b' || ch == 'c') {
                     state = "q1";
                 } else {
                     state = "qe";
