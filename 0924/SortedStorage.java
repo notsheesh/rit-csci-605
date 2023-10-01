@@ -296,6 +296,10 @@ public class SortedStorage {
         System.out.println(list.add(null));
         System.out.println(list.add("8"));
         System.out.println(list.add(null));
-        System.out.println(list.add("1"));
+        System.out.println(list);  
+        System.out.println(list.delete(null));
+        System.out.println(list.delete(null));
+        System.out.println(list);
+
     }
 }
