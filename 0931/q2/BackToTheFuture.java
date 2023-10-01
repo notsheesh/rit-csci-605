@@ -12,6 +12,8 @@
 
 import java.io.File; // Handles reading from file
 import java.io.FileNotFoundException; // Exception in case file can't be loaded
+import java.io.FilenameFilter;
+import java.lang.reflect.Field;
 import java.util.Scanner; // Handles user input
 import java.util.Random; // Generates random index for picking a word 
 
@@ -36,65 +38,11 @@ class Player {
         do {
             System.out.print("What's your guess? ");
             userGuess = usrInputScnnr.next().toUpperCase().charAt(0);
-            if (!Player.isValidInput(userGuess)) {
+            if (!Game.isValidInput(userGuess)) {
                 System.out.printf("Invalid input    | ");
             }
-        } while (!Player.isValidInput(userGuess));
+        } while (!Game.isValidInput(userGuess));
         return userGuess;
-    }
-
-    /**
-     * Checks if the provided character is a valid input by verifying if it is
-     * a letter (uppercase or lowercase).
-     * 
-     * @param userGuess - The character to be checked.
-     * 
-     * @return true if the character is a valid letter, otherwise false.
-     * 
-     * @author Kyle Burke, Shreesh Tripathi
-     */
-    public static boolean isValidInput(char userGuess) {
-        int aASCII = (int) 'a';
-        int zASCII = (int) 'z';
-        int AASCII = (int) 'A';
-        int ZASCII = (int) 'Z';
-        int userGuessASCII = (int) userGuess;
-        if ((userGuessASCII >= aASCII && userGuessASCII <= zASCII) ||
-                (userGuessASCII >= AASCII && userGuessASCII <= ZASCII)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Generates an updated hint based on the user's guess and the current hint.
-     * Replaces underscores '_' with the correct letter if the guess is correct.
-     * 
-     * @param guess  - The letter guessed by the user.
-     * @param answer - The target word or phrase to be guessed.
-     * @param hint   - The current hint, where underscores represent unknown
-     *               letters.
-     * 
-     * @return The updated hint with correct guesses revealed.
-     * 
-     * @author Kyle Burke, Shreesh Tripathi
-     */
-    public static String generateHint(
-            char guess, String answer, String hint) {
-        boolean flag = false;
-        String newHint = "";
-        for (int i = 0; i < answer.length(); i++) {
-            if (hint.charAt(i) != '_') {
-                newHint += hint.charAt(i);
-            } else if (guess == answer.charAt(i) && flag == false) {
-                newHint += guess;
-                // flag = true;
-            } else {
-                newHint += '_';
-            }
-        }
-        return newHint;
     }
 
     /**
@@ -124,7 +72,7 @@ class Player {
             userGuess = Player.takeUserInput(attemptsLeft);
 
             // Check user input and generate hint
-            newHint = Player.generateHint(userGuess, wordToBeGuessed, hint);
+            newHint = Game.generateHint(userGuess, wordToBeGuessed, hint);
 
             // Update progress and attempts left
             attemptsLeft = Player.updateAttemptsLeft(hint, newHint, attemptsLeft);
@@ -434,6 +382,60 @@ class Game {
         }
 
         Dictionary.updateDictionary(wordToBeGuessedIndex);
+    }
+
+    /**
+     * Checks if the provided character is a valid input by verifying if it is
+     * a letter (uppercase or lowercase).
+     * 
+     * @param userGuess - The character to be checked.
+     * 
+     * @return true if the character is a valid letter, otherwise false.
+     * 
+     * @author Kyle Burke, Shreesh Tripathi
+     */
+    public static boolean isValidInput(char userGuess) {
+        int aASCII = (int) 'a';
+        int zASCII = (int) 'z';
+        int AASCII = (int) 'A';
+        int ZASCII = (int) 'Z';
+        int userGuessASCII = (int) userGuess;
+        if ((userGuessASCII >= aASCII && userGuessASCII <= zASCII) ||
+                (userGuessASCII >= AASCII && userGuessASCII <= ZASCII)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Generates an updated hint based on the user's guess and the current hint.
+     * Replaces underscores '_' with the correct letter if the guess is correct.
+     * 
+     * @param guess  - The letter guessed by the user.
+     * @param answer - The target word or phrase to be guessed.
+     * @param hint   - The current hint, where underscores represent unknown
+     *               letters.
+     * 
+     * @return The updated hint with correct guesses revealed.
+     * 
+     * @author Kyle Burke, Shreesh Tripathi
+     */
+    public static String generateHint(
+            char guess, String answer, String hint) {
+        boolean flag = false;
+        String newHint = "";
+        for (int i = 0; i < answer.length(); i++) {
+            if (hint.charAt(i) != '_') {
+                newHint += hint.charAt(i);
+            } else if (guess == answer.charAt(i) && flag == false) {
+                newHint += guess;
+                // flag = true;
+            } else {
+                newHint += '_';
+            }
+        }
+        return newHint;
     }
 }
 
