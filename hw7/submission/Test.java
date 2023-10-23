@@ -104,9 +104,9 @@ public class Test {
             musicStorage1, null, musicStorage2, musicStorage3
         };
 
-        // aSortedMusicStorage.notASet();
+        aSortedMusicStorage.notASet();
 
-        // System.out.println("---SortedStorage will NOT BEHAVE LIKE A SET---");
+        System.out.println("---SortedStorage will NOT BEHAVE LIKE A SET---");
         for (int index = 0; index < toInsert.length; index ++ )	{
             System.out.println("- add(" + toInsert[index] + "): "  + aSortedMusicStorage.add(toInsert[index]));
         }
