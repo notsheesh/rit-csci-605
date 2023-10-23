@@ -1,0 +1,22 @@
+javac Test3.java && java Test3
+		===String===
+natural before sort - aStringList: a c b/3
+natural after  sort - aStringList: a b c/3
+----------------------------------------------------------
+natural before sort - aStringList: a c b/3
+natural after  sort - aStringList: a b c/3
+----------------------------------------------------------
+		===Integer===
+natural before sort - aIntegerList: 1 3 2 5 4/5
+natural after  sort - aIntegerList: 1 2 3 4 5/5
+----------------------------------------------------------
+reverse before sort - aIntegerList: 1 3 2 5 4/5
+reverse after sort - aIntegerList: 5 4 3 2 1/5
+----------------------------------------------------------
+		===Double===
+natural before sort - aDoubleList: 1.0 3.0 2.0 5.0 4.0/5
+natural after  sort - aDoubleList: 1.0 2.0 3.0 4.0 5.0/5
+----------------------------------------------------------
+reverse before sort - aDoubleList: 1.0 3.0 2.0 5.0 4.0/5
+reverse after sort - aDoubleList: 5.0 4.0 3.0 2.0 1.0/5
+----------------------------------------------------------

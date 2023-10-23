@@ -105,7 +105,7 @@ public class Node implements Comparable<String>{
     public void setNext(Node newNext){
         this.next = newNext;
     }
-
+Isometric drawing of a multifunctional bedroom, where tech, nature, fitness, and fandom harmoniously coexist. The room features a sturdy power rack with a barbell, hinting at the occupant's fitness routine. Fewer bookshelves, but still present, are now accompanied by anime figurines. The blonde anime girl with a red bow is at her desk, working intently on the CRT monitor. Plants, including a ceiling-to-floor vine, provide a refreshing touch, creating a unique blend of interests in the space.
     /**
      * Returns the value stored in this Node
      * @return value - The value stored in this Node.
