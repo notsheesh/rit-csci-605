@@ -1,2 +1,0 @@
-javac DiskDump.java && java DiskDump if=input.txt of=output skip=3 bs=3
-javac DiskDump.java && java DiskDump if=input.txt of=- skip=3 bs=3
