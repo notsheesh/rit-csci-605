@@ -63,7 +63,7 @@ public class ImageGenerator{
      * @author Kyle Burke
      * @author Shreesh Tripathi
      */
-    public static ArrayList<DummyThread> threadCreation(Scanner sc){
+    public static ArrayList<DummyThread> threadCreation(Scanner sc, boolean from_sys_in){
         try{
             ArrayList<DummyThread> threads = new ArrayList<>();
 
@@ -75,6 +75,7 @@ public class ImageGenerator{
             int y = 0;
 
             while (sc.hasNext()){
+
                 try{
                     // Fill even squares with red and odd with blue
                     currPixel = Integer.parseInt(sc.next());
@@ -85,6 +86,7 @@ public class ImageGenerator{
                         threads.add(new DummyThread(img, x, y, BLUE, threads.size()));
                     }
                 }
+
                 // If there's bad input (like a letter or something) fill it with blue
                 catch (NumberFormatException e){
                     threads.add(new DummyThread(img, x, y, BLUE, threads.size()));
@@ -101,6 +103,9 @@ public class ImageGenerator{
                 // If you've reached the final edge of the image, break the loop
                 if (x > img.getHeight()-SQUARE_SIZE){
                     break;
+                }
+                if (from_sys_in){
+                    System.out.print("> ");
                 }
             }
             // Return the list of threads
@@ -148,6 +153,7 @@ public class ImageGenerator{
         // IntelliJ IDEA suggests fixing it.
         Scanner sc;
         ArrayList<DummyThread> threads;
+        boolean from_sys_in = false;
         if (args.length > 0){
             try{
                 sc = new Scanner(new File(args[0]));
@@ -155,15 +161,20 @@ public class ImageGenerator{
             }
             catch (FileNotFoundException e){
                 System.err.println("File could not be found, input will be taken from STD_IN");
+                System.out.print("> ");
+                from_sys_in = true;
                 sc = new Scanner(System.in);
             }
         }
         else{
+            System.err.println("No file found, input will be taken from STD_IN");
+            System.out.print("> ");
             sc = new Scanner(System.in);
+            from_sys_in = true;
         }
 
         // Attempt to fill an image using digits from the Scanner
-        threads = threadCreation(sc);
+        threads = threadCreation(sc, from_sys_in);
         fillImage(threads);
 
         //If all goes well, save the image to file
