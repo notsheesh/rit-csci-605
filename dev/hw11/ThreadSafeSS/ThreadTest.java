@@ -1,3 +1,5 @@
+// Author: Kyle Burke, Shreesh Tripathi
+
 public class ThreadTest {
 
     public static void main(String[] args) {
@@ -67,7 +69,7 @@ public class ThreadTest {
         System.out.println();
         System.out.println(sortedStorage);
         System.out.println();
-        
+
     }
 
     private static boolean isSorted(SortedStorage<Integer> storage) {
