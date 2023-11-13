@@ -30,29 +30,50 @@ public class Hw11 extends Thread {
 
 	private String info;
 	static Object o = new Object();
+	static boolean first = true;
 	public Hw11 (String info) {
-		// 2. But they still share the same sync object 'o'
-		this.o = new Object();
+		
+		/* 2. But they still share the same sync object 'o'
+		 2.1. Creating a new object in the constructor can lead 
+		 to an unintentional permanent wait
+		 Since the object monitor for each thread will be different,
+		 thread A calling notify will not wake up thread B 
+		 Commenting this line ensures that both objects are always 
+		 using the same Object 'o'
+		 */
+
+		//this.o = new Object(); 
 		this.info    = info;
 	}
 	public void run () {
+
+
+		// By forcing the first thread to wait
+		// ensure that there will always be a thread to call notify
+		
 		synchronized ( o ) {
 			// 3. This does nothing at first since no thread asked to wait
 			// 4. Problem: Notify is called by both threads BEFORE the wait call
-			o.notify();
-			System.out.println(info);
-			try {
-				// 5. The threads will be stuck in a blocked state after
-				// executing the wait, and there is no subsequent notification to wake them
-				o.wait();
-			} catch ( Exception e ) {
-				e.printStackTrace();
+			if (first){
+				first = false;
+				try{
+					o.wait();
+				}
+				catch (InterruptedException e){
+
+				}
 			}
+			else{
+				
+				o.notify();
+			}
+			System.err.println(info);
 		}
 	}
 	public static void main (String args []) {
 		// 1. Two instances of Hw11 are created
 		new Hw11("0").start();
 		new Hw11("1").start();
+		
 	}
 }
