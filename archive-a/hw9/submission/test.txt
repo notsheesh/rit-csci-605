@@ -1,4 +1,0 @@
-Lorem ipsum dolor sit amet. There are x many words
-This many lines
-and  whole lotta bytes
-    This file will be scrambled
